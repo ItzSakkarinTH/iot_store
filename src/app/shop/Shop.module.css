@@ -1,0 +1,190 @@
+.container {
+  min-height: 100vh;
+  background: #0f172a;
+  color: #fff;
+  padding-bottom: 5rem;
+}
+
+.hero {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #0f172a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.filterBtn {
+  padding: 0.6rem 1.25rem;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  color: #94a3b8;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.filterBtn:hover, .activeFilter {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.productCard {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.productCard:hover {
+  transform: translateY(-5px);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.imagePlaceholder {
+  height: 200px;
+  background: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.1);
+}
+
+.cardBody {
+  padding: 1.5rem;
+}
+
+.category {
+  font-size: 0.8rem;
+  color: #3b82f6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.addBtn {
+  background: #3b82f6;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.addBtn:hover {
+  background: #2563eb;
+}
+
+.cartPanel {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #3b82f6;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+  cursor: pointer;
+  z-index: 1000;
+  font-weight: 600;
+}
+
+/* Modal styles similar to POS */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.modal {
+  background: #1e293b;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 24px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cartItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.checkoutBtn {
+  width: 100%;
+  padding: 1rem;
+  background: #3b82f6;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  margin-top: 2rem;
+  cursor: pointer;
+}

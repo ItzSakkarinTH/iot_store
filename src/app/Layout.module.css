@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  height: calc(100vh - 70px);
+  width: 100vw;
+  overflow: hidden;
+  padding: 1.5rem;
+  gap: 1.5rem;
+}
+
+.mainContent {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  border-radius: 16px;
+  background-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .container {
+    height: calc(100vh - 70px);
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .mainContent {
+    height: calc(100vh - 140px);
+    padding-bottom: 2rem;
+  }
+}

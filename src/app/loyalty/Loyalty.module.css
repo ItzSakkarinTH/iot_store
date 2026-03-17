@@ -1,0 +1,195 @@
+.container {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 1rem;
+}
+
+.titleArea {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--primary-dark);
+}
+
+.icon {
+  color: var(--primary);
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  gap: 0.5rem;
+  width: 300px;
+}
+
+.searchIcon {
+  color: var(--text-muted);
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.statCard {
+  background-color: var(--surface);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.statCard h3 {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.statVal {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  color: var(--primary-dark);
+}
+
+.tableWrapper {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.table th {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.memberName {
+  font-weight: 600;
+}
+
+.pointsCol {
+  color: #d97706; /* gold/orange */
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.starIcon {
+  fill: #f59e0b;
+  color: #f59e0b;
+}
+
+.tierBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.gold {
+  background-color: #fef08a;
+  color: #854d0e;
+}
+
+.silver {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.bronze {
+  background-color: #ffedd5;
+  color: #9a3412;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .searchBar {
+    width: 100%;
+  }
+
+  .tableHeader {
+    display: none;
+  }
+
+  .table, .table tbody, .table tr, .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--surface);
+  }
+
+  .table td {
+    padding: 0.5rem 0;
+    text-align: right;
+    border-bottom: 1px dashed var(--border);
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .table td:last-child {
+    border-bottom: none;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 600;
+    text-align: left;
+    color: var(--text-muted);
+  }
+}
