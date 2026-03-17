@@ -21,7 +21,7 @@ const navGroups = [
       { href: "/", label: "หน้าหลัก UltraStore", Icon: Sparkles },
       { href: "/dashboard", label: "แผงควบคุม Dashboard", Icon: LayoutDashboard },
       { href: "/pos", label: "ระบบขายหน้าร้าน POS", Icon: ShoppingBag },
-      { href: "/inventory", label: "จัดการสต็อกสินค้า", Icon: PackageSearch },
+      { href: "/inventory", label: "จัดการข้อมูลสินค้า", Icon: PackageSearch },
       { href: "/history", label: "ประวัติการทำรายการ", Icon: History },
       { href: "/loyalty", label: "ระบบสมาชิก CRM", Icon: Users },
     ],

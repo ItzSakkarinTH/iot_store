@@ -46,18 +46,32 @@
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 1rem;
+  overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .productCard:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); /* primary shadow */
   border-color: var(--primary-light);
+}
+
+.productImage {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  background-color: var(--background);
+}
+
+.productInfo {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
 }
 
 .productName {

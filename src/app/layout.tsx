@@ -3,8 +3,8 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 
 export const metadata: Metadata = {
-  title: "EcoPOS - Smart POS System",
-  description: "Next-gen Point of Sale and Loyalty System",
+  title: "UltraStore - Next-gen POS & Inventory Shop",
+  description: "ระบบจัดการสินค้าและหน้าร้านอัจฉยิระ ยุคใหม่แห่งการขาย",
 };
 
 export default function RootLayout({
