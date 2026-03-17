@@ -46,9 +46,9 @@ export default function ShopPage() {
     <div className={styles.container}>
       <header className={styles.hero}>
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          เลือกซื้อสินค้าที่คุณต้องการ
+          รายการสินค้าทั้งหมด
         </motion.h1>
-        <p>สินค้าคุณภาพดี จัดส่งรวดเร็ว ทันใจ</p>
+        <p>สินค้าคุณภาพดี สำหรับคุณโดยเฉพาะ</p>
       </header>
 
       <main className={styles.content}>
@@ -72,7 +72,11 @@ export default function ShopPage() {
               whileHover={{ y: -5 }}
             >
               <div className={styles.imagePlaceholder}>
-                <ShoppingCart size={48} />
+                {product.image ? (
+                  <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <ShoppingCart size={48} />
+                )}
               </div>
               <div className={styles.cardBody}>
                 <span className={styles.category}>{product.category}</span>

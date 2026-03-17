@@ -120,6 +120,19 @@
   color: var(--primary-dark);
 }
 
+.productThumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.fileInput {
+  max-width: 150px;
+  font-size: 0.75rem;
+}
+
 /* Mobile responsive - Convert table to cards */
 @media (max-width: 768px) {
   .tableHeader {

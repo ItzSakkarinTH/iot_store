@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useStore, Order, CartItem } from "@/store/useStore";
 import { 
   Search, Plus, Minus, Trash2, CreditCard, ScanLine, 
-  CheckCircle, ArrowRight
+  CheckCircle, ArrowRight, ShoppingCart
 } from "lucide-react";
 import styles from "./POS.module.css";
 import { motion, AnimatePresence } from "framer-motion";
@@ -93,10 +93,17 @@ export default function POSView() {
         <div className={styles.productGrid}>
           {filteredProducts.map(product => (
             <div key={product._id} className={styles.productCard} onClick={() => addToCart(product)}>
+              {product.image ? (
+                <img src={product.image} className={styles.productImage} alt={product.name} />
+              ) : (
+                <div className={styles.productImage} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <ShoppingCart size={32} color="#ccc" />
+                </div>
+              )}
               <div className={styles.productInfo}>
                 <h3 className={styles.productName}>{product.name}</h3>
                 <p className={styles.productStock}>Stock: {product.stock}</p>
-                <p className={styles.productPrice}>฿{product.price}</p>
+                <p className={styles.productPrice}>฿{product.price.toLocaleString()}</p>
               </div>
             </div>
           ))}

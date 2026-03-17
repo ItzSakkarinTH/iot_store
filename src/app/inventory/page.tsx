@@ -15,10 +15,28 @@ export default function InventoryView() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<Product>>({});
   const [isAdding, setIsAdding] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const handleEditClick = (product: Product) => {
     setEditingId(product._id);
     setEditForm(product);
+  };
+
+  const handleFileUpload = async (file: File) => {
+    setUploading(true);
+    try {
+      const response = await fetch(`/api/upload?filename=${file.name}`, {
+        method: 'POST',
+        body: file,
+      });
+      const newBlob = await response.json();
+      setEditForm(prev => ({ ...prev, image: newBlob.url }));
+    } catch (err) {
+      console.error('Upload failed:', err);
+      alert('อัพโหลดรูปภาพไม่สำเร็จ');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSave = async () => {
@@ -48,7 +66,7 @@ export default function InventoryView() {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm("คุณแน่ใจหรือไม่ที่จะลบสินค้านี้?")) {
       try {
         await fetch(`/api/inventory?id=${id}`, { method: 'DELETE' });
         deleteProduct(id);
@@ -72,16 +90,16 @@ export default function InventoryView() {
       exit={{ opacity: 0 }}
     >
       <header className={styles.header}>
-        <h2>Inventory Management</h2>
+        <h2>จัดการข้อมูลสินค้า</h2>
         <button 
           className={styles.addBtn}
           onClick={() => {
              setEditingId("new");
-             setEditForm({ name: "", price: 0, category: "", stock: 0, sku: "" });
+             setEditForm({ name: "", price: 0, category: "", stock: 0, sku: "", image: "" });
              setIsAdding(true);
           }}
         >
-          <Plus size={18} /> Add Product
+          <Plus size={18} /> เพิ่มสินค้า
         </button>
       </header>
 
@@ -89,24 +107,35 @@ export default function InventoryView() {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>Name</th>
+              <th>รูปภาพ</th>
+              <th>ชื่อสินค้า</th>
               <th>SKU</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Actions</th>
+              <th>หมวดหมู่</th>
+              <th>ราคา</th>
+              <th>คงเหลือ</th>
+              <th>จัดการ</th>
             </tr>
           </thead>
           <tbody>
-            {isAdding && editingId === "new" && (
+            {(isAdding && editingId === "new") && (
               <tr className={styles.editingRow}>
-                <td><input name="name" value={editForm.name} onChange={handleChange} className={styles.input} placeholder="Product Name" /></td>
+                <td>
+                  {editForm.image && <img src={editForm.image} className={styles.productThumb} alt="preview" />}
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
+                    className={styles.fileInput}
+                  />
+                  {uploading && <span style={{fontSize: '0.7rem'}}>กำลังอัพโหลด...</span>}
+                </td>
+                <td><input name="name" value={editForm.name} onChange={handleChange} className={styles.input} placeholder="ชื่อสินค้า" /></td>
                 <td><input name="sku" value={editForm.sku} onChange={handleChange} className={styles.input} placeholder="SKU" /></td>
-                <td><input name="category" value={editForm.category} onChange={handleChange} className={styles.input} placeholder="Category" /></td>
+                <td><input name="category" value={editForm.category} onChange={handleChange} className={styles.input} placeholder="หมวดหมู่" /></td>
                 <td><input type="number" name="price" value={editForm.price} onChange={handleChange} className={styles.input} /></td>
                 <td><input type="number" name="stock" value={editForm.stock} onChange={handleChange} className={styles.input} /></td>
                 <td className={styles.actions}>
-                  <button onClick={handleSave} className={styles.saveBtn}><Save size={18}/></button>
+                  <button onClick={handleSave} className={styles.saveBtn} disabled={uploading}><Save size={18}/></button>
                   <button onClick={() => { setEditingId(null); setIsAdding(false); }} className={styles.cancelBtn}><X size={18}/></button>
                 </td>
               </tr>
@@ -115,28 +144,47 @@ export default function InventoryView() {
               <tr key={product._id} className={editingId === product._id ? styles.editingRow : ""}>
                 {editingId === product._id ? (
                   <>
-                    <td data-label="Name"><input name="name" value={editForm.name} onChange={handleChange} className={styles.input} /></td>
+                    <td>
+                      {editForm.image && <img src={editForm.image} className={styles.productThumb} alt="preview" />}
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
+                        className={styles.fileInput}
+                      />
+                      {uploading && <span style={{fontSize: '0.7rem'}}>กำลังอัพโหลด...</span>}
+                    </td>
+                    <td data-label="ชื่อสินค้า"><input name="name" value={editForm.name} onChange={handleChange} className={styles.input} /></td>
                     <td data-label="SKU"><input name="sku" value={editForm.sku} onChange={handleChange} className={styles.input} /></td>
-                    <td data-label="Category"><input name="category" value={editForm.category} onChange={handleChange} className={styles.input} /></td>
-                    <td data-label="Price"><input type="number" name="price" value={editForm.price} onChange={handleChange} className={styles.input} /></td>
-                    <td data-label="Stock"><input type="number" name="stock" value={editForm.stock} onChange={handleChange} className={styles.input} /></td>
-                    <td data-label="Actions" className={styles.actions}>
-                      <button onClick={handleSave} className={styles.saveBtn}><Save size={18}/></button>
+                    <td data-label="หมวดหมู่"><input name="category" value={editForm.category} onChange={handleChange} className={styles.input} /></td>
+                    <td data-label="ราคา"><input type="number" name="price" value={editForm.price} onChange={handleChange} className={styles.input} /></td>
+                    <td data-label="คงเหลือ"><input type="number" name="stock" value={editForm.stock} onChange={handleChange} className={styles.input} /></td>
+                    <td data-label="จัดการ" className={styles.actions}>
+                      <button onClick={handleSave} className={styles.saveBtn} disabled={uploading}><Save size={18}/></button>
                       <button onClick={() => setEditingId(null)} className={styles.cancelBtn}><X size={18}/></button>
                     </td>
                   </>
                 ) : (
                   <>
-                    <td data-label="Name">{product.name}</td>
+                    <td data-label="รูปภาพ">
+                      {product.image ? (
+                        <img src={product.image} className={styles.productThumb} alt={product.name} />
+                      ) : (
+                        <div className={styles.productThumb} style={{ background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <X size={16} color="#ccc" />
+                        </div>
+                      )}
+                    </td>
+                    <td data-label="ชื่อสินค้า">{product.name}</td>
                     <td data-label="SKU">{product.sku}</td>
-                    <td data-label="Category">{product.category}</td>
-                    <td data-label="Price" className={styles.priceCol}>฿{product.price}</td>
-                    <td data-label="Stock">
+                    <td data-label="หมวดหมู่">{product.category}</td>
+                    <td data-label="ราคา" className={styles.priceCol}>฿{product.price.toLocaleString()}</td>
+                    <td data-label="คงเหลือ">
                       <span className={`${styles.stockBadge} ${product.stock < 10 ? styles.lowStock : ""}`}>
                         {product.stock}
                       </span>
                     </td>
-                    <td data-label="Actions" className={styles.actions}>
+                    <td data-label="จัดการ" className={styles.actions}>
                       <button onClick={() => handleEditClick(product)} className={styles.editBtn}><Edit2 size={16}/></button>
                       <button onClick={() => handleDelete(product._id)} className={styles.delBtn}><Trash2 size={16}/></button>
                     </td>
@@ -146,8 +194,8 @@ export default function InventoryView() {
             ))}
             {products.length === 0 && !isAdding && (
               <tr>
-                <td colSpan={6} style={{ textAlign: "center", padding: "2rem", color: "var(--text-muted)" }}>
-                  No products in inventory.
+                <td colSpan={7} style={{ textAlign: "center", padding: "2rem", color: "var(--text-muted)" }}>
+                  ไม่มีข้อมูลสินค้าในคลัง
                 </td>
               </tr>
             )}
@@ -157,3 +205,4 @@ export default function InventoryView() {
     </motion.div>
   );
 }
+
