@@ -148,7 +148,11 @@ export default function ShopPage() {
                   <span>ยอดรวมทั้งสิ้น</span>
                   <span>฿{cartTotal().toLocaleString()}</span>
                 </div>
-                <button className={styles.checkoutBtn} onClick={handleCheckout}>
+                <button 
+                  className={styles.checkoutBtn} 
+                  onClick={handleCheckout}
+                  disabled={cart.length === 0}
+                >
                   ยืนยันการสั่งซื้อ
                 </button>
               </div>
