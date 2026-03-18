@@ -81,7 +81,7 @@ export default function ShopPage() {
               <div className={styles.cardBody}>
                 <span className={styles.category}>{product.category}</span>
                 <h3 className={styles.name}>{product.name}</h3>
-                <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>SKU: {product.sku}</p>
+                <p className={styles.sku}>SKU: {product.sku}</p>
                 <div className={styles.priceRow}>
                   <span className={styles.price}>฿{product.price.toLocaleString()}</span>
                   <button className={styles.addBtn} onClick={() => addToCart(product)}>
@@ -120,29 +120,29 @@ export default function ShopPage() {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
                 <h2>ตะกร้าสินค้าของคุณ</h2>
-                <button onClick={() => setIsCartOpen(false)} style={{ background: 'none', border: 'none', color: '#fff' }}>
+                <button onClick={() => setIsCartOpen(false)} className={styles.closeBtn}>
                   <X />
                 </button>
               </div>
 
-              <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+              <div className={styles.cartList}>
                 {cart.map(item => (
                   <div key={item._id} className={styles.cartItem}>
                     <div>
                       <h4 style={{ margin: 0 }}>{item.name}</h4>
                       <p style={{ color: '#94a3b8', margin: 0 }}>฿{item.price.toLocaleString()}</p>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <button onClick={() => updateCartQuantity(item._id, item.quantity - 1)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: '4px', width: '24px' }}>-</button>
-                      <span>{item.quantity}</span>
-                      <button onClick={() => addToCart(item)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: '4px', width: '24px' }}>+</button>
+                    <div className={styles.qtyControls}>
+                      <button onClick={() => updateCartQuantity(item._id, item.quantity - 1)} className={styles.qtyBtn}>-</button>
+                      <span className={styles.qtyText}>{item.quantity}</span>
+                      <button onClick={() => addToCart(item)} className={styles.qtyBtn}>+</button>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div style={{ marginTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 700 }}>
+              <div className={styles.checkoutSection}>
+                <div className={styles.totalRow}>
                   <span>ยอดรวมทั้งสิ้น</span>
                   <span>฿{cartTotal().toLocaleString()}</span>
                 </div>
