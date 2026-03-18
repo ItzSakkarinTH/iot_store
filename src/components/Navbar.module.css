@@ -3,48 +3,62 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background: #0f172a;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: var(--glass-shadow);
 }
 
 .logoArea {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-weight: 700;
-  font-size: 1.25rem;
-  color: #fff;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--text-primary);
   cursor: pointer;
+  letter-spacing: -0.02em;
 }
 
 .logoIcon {
-  color: #3b82f6;
+  color: var(--primary);
+  filter: drop-shadow(0 0 5px var(--primary-glow));
 }
 
 .navLinks {
   display: flex;
-  gap: 2rem;
-  background: #1e293b;
-  padding: 0.5rem 1.5rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
 }
 
 .navLink {
-  color: #94a3b8;
+  color: var(--text-secondary);
   text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.2s;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: var(--transition);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-pill);
 }
 
 .navLink:hover, .active {
-  color: #fff;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.active {
+  color: var(--primary);
+  background: var(--primary-light);
 }
 
 .userArea {
@@ -55,66 +69,81 @@
 
 .cartBtn {
   position: relative;
-  background: transparent;
-  border: none;
-  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.03);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: color 0.2s;
+  transition: var(--transition);
 }
 
 .cartBtn:hover {
-  color: #fff;
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--primary-glow);
 }
 
 .cartBadge {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #3b82f6;
+  top: -4px;
+  right: -4px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #fff;
   font-size: 0.7rem;
   padding: 2px 6px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-weight: 700;
+  box-shadow: 0 0 10px var(--primary-glow);
 }
 
 .profile {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.25rem 0.75rem;
-  background: #1e293b;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #fff;
+  padding: 0.35rem 1rem 0.35rem 0.35rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
   font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .avatar {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 0.8rem;
+  box-shadow: 0 0 10px var(--primary-glow);
 }
 
 .loginBtn {
-  background: #3b82f6;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: white;
-  padding: 0.5rem 1.25rem;
-  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-pill);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  transition: background 0.2s;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px var(--primary-glow);
 }
 
 .loginBtn:hover {
-  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--primary-glow);
 }
 
 @media (max-width: 768px) {
