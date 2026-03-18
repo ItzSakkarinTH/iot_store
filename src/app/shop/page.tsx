@@ -7,8 +7,10 @@ import styles from "./Shop.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ShopPage() {
-  const { products, cart, addToCart, updateCartQuantity, cartTotal, fetchProducts, clearCart, addOrder } = useStore();
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { 
+    products, cart, addToCart, updateCartQuantity, cartTotal, 
+    fetchProducts, clearCart, addOrder, isCartOpen, setIsCartOpen 
+  } = useStore();
   const [category, setCategory] = useState("All");
 
   useEffect(() => {
@@ -146,7 +148,11 @@ export default function ShopPage() {
                   <span>ยอดรวมทั้งสิ้น</span>
                   <span>฿{cartTotal().toLocaleString()}</span>
                 </div>
-                <button className={styles.checkoutBtn} onClick={handleCheckout}>
+                <button 
+                  className={styles.checkoutBtn} 
+                  onClick={handleCheckout}
+                  disabled={cart.length === 0}
+                >
                   ยืนยันการสั่งซื้อ
                 </button>
               </div>
