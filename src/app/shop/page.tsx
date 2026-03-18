@@ -7,8 +7,10 @@ import styles from "./Shop.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ShopPage() {
-  const { products, cart, addToCart, updateCartQuantity, cartTotal, fetchProducts, clearCart, addOrder } = useStore();
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { 
+    products, cart, addToCart, updateCartQuantity, cartTotal, 
+    fetchProducts, clearCart, addOrder, isCartOpen, setIsCartOpen 
+  } = useStore();
   const [category, setCategory] = useState("All");
 
   useEffect(() => {
