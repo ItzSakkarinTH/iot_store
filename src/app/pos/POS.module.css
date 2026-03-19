@@ -240,7 +240,7 @@
 .checkoutBtn {
   width: 100%;
   padding: 1.25rem;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: var(--primary);
   color: white;
   border-radius: var(--radius-lg);
   font-size: 1.1rem;
@@ -359,7 +359,7 @@
 }
 
 .confirmBtn {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: var(--primary);
   color: white;
   display: flex;
   justify-content: center;
@@ -374,7 +374,7 @@
 }
 
 .successBtn {
-  background: linear-gradient(135deg, var(--success), #059669);
+  background: var(--success);
   color: white;
   display: flex;
   justify-content: center;

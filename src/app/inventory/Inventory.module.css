@@ -18,7 +18,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.85rem 1.75rem;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: var(--radius-lg);

@@ -94,7 +94,7 @@
   position: absolute;
   top: -4px;
   right: -4px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background: var(--primary);
   color: #fff;
   font-size: 0.7rem;
   padding: 2px 6px;
@@ -120,7 +120,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -130,7 +130,7 @@
 }
 
 .loginBtn {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: var(--primary);
   color: white;
   padding: 0.6rem 1.5rem;
   border-radius: var(--radius-pill);

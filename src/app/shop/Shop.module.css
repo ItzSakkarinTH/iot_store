@@ -1,7 +1,7 @@
 /* Modern UI Variables - Easy to Edit */
 .container {
   --bg-color: #050b14;
-  --bg-gradient: radial-gradient(circle at top right, rgba(59, 130, 246, 0.15), transparent 40%), radial-gradient(circle at bottom left, rgba(147, 51, 234, 0.15), transparent 40%);
+  --bg-gradient: none;
   --card-bg: rgba(30, 41, 59, 0.4);
   --card-border: rgba(255, 255, 255, 0.08);
   --card-hover-border: rgba(59, 130, 246, 0.5);
@@ -15,7 +15,7 @@
   
   min-height: 100vh;
   background-color: var(--bg-color);
-  background-image: var(--bg-gradient);
+  background-color: var(--bg-color);
   color: var(--text-primary);
   padding-bottom: 5rem;
   font-family: 'Inter', system-ui, sans-serif;
@@ -38,19 +38,15 @@
   transform: translateX(-50%);
   width: 50%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+  background: var(--accent-color);
   opacity: 0.5;
 }
 
 .hero h1 {
   font-size: 3.5rem;
   margin-bottom: 1.5rem;
-  color: var(--text-primary);
+  color: #fff;
   font-weight: 800;
-  background: linear-gradient(to right, #fff, #94a3b8);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
   letter-spacing: -0.05em;
 }
 
@@ -131,7 +127,7 @@
 /* Image Placeholder */
 .imagePlaceholder {
   height: 220px;
-  background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%);
+  background: rgba(255,255,255,0.05);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -144,7 +140,7 @@
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(180deg, transparent 50%, rgba(15, 23, 42, 0.8) 100%);
+  background: rgba(15, 23, 42, 0.5);
   opacity: 0.5;
 }
 
@@ -221,7 +217,7 @@
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  background: var(--accent-color);
   color: white;
   padding: 1rem 2rem;
   border-radius: 999px;
@@ -390,7 +386,7 @@
 .checkoutBtn {
   width: 100%;
   padding: 1.2rem;
-  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  background: var(--accent-color);
   border: none;
   border-radius: 16px;
   color: white;
