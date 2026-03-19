@@ -474,9 +474,17 @@
   color: #fff;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .container {
     flex-direction: column;
     height: auto;
+  }
+  
+  .cartSection {
+    min-width: 100%;
+  }
+
+  .productGrid {
+    max-height: 50vh;
   }
 }
