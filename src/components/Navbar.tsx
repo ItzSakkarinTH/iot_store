@@ -68,7 +68,7 @@ export default function Navbar() {
       </div>
 
       <div className={styles.userArea}>
-        <Link href="/shop" className={styles.cartBtn} onClick={() => setIsCartOpen(true)}>
+        <Link href="/cart" className={styles.cartBtn}>
           <ShoppingCart size={22} />
           {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
         </Link>
