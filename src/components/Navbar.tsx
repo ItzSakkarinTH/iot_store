@@ -74,12 +74,12 @@ export default function Navbar() {
         </Link>
         
         {isLoggedIn ? (
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <div className={styles.profile}>
               <div className={styles.avatar}>{userRole === "admin" ? "A" : "U"}</div>
               <span>{userRole === "admin" ? "Admin" : "Customer"}</span>
             </div>
-            <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}>
+            <button onClick={handleLogout} className={styles.logoutTextBtn}>
               ออกจากระบบ
             </button>
           </div>

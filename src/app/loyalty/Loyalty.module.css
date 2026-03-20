@@ -246,4 +246,12 @@
     text-align: left;
     color: var(--text-muted);
   }
+
+  .tableWrapper {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    padding: 0;
+  }
 }
