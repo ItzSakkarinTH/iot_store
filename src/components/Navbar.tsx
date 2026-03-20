@@ -21,6 +21,9 @@ export default function Navbar() {
   });
   const [userRole, setUserRole] = useState<string | null>(null);
 
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
   useEffect(() => {
     const checkLogin = () => {
       setIsLoggedIn(!!localStorage.getItem("token"));
@@ -28,6 +31,26 @@ export default function Navbar() {
     };
     checkLogin();
   }, [pathname]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Hide if scrolling down and not near the top
+      if (currentScrollY > 60 && currentScrollY > lastScrollY) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -38,7 +61,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={styles.navbar}>
+    <nav className={`${styles.navbar} ${isVisible ? '' : styles.navHidden}`}>
       <Link href="/" className={styles.logoArea}>
         <Sparkles className={styles.logoIcon} size={24} />
         <span>UltraStore</span>
