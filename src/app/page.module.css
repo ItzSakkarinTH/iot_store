@@ -63,7 +63,7 @@
 }
 
 a.primary {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: var(--primary);
   color: white;
   box-shadow: 0 4px 15px var(--primary-glow);
 }

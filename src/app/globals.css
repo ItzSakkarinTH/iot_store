@@ -11,7 +11,7 @@
   /* Backgrounds */
   --bg-color: #050b14;
   --background: #050b14;
-  --bg-gradient: radial-gradient(circle at top right, rgba(59, 130, 246, 0.15), transparent 40%), radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.15), transparent 40%);
+  --bg-gradient: none;
   
   /* Surfaces & Glassmorphism */
   --surface: rgba(15, 23, 42, 0.5); 
@@ -52,8 +52,6 @@ body {
   font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   color: var(--text-main);
   background-color: var(--bg-color);
-  background-image: var(--bg-gradient);
-  background-attachment: fixed;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
@@ -101,14 +99,11 @@ input:focus, textarea:focus, select:focus {
 }
 
 .gradient-text {
-  background: linear-gradient(to right, #fff, var(--text-muted));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #fff;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: var(--primary);
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-md);

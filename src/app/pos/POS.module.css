@@ -240,7 +240,7 @@
 .checkoutBtn {
   width: 100%;
   padding: 1.25rem;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: var(--primary);
   color: white;
   border-radius: var(--radius-lg);
   font-size: 1.1rem;
@@ -359,7 +359,7 @@
 }
 
 .confirmBtn {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: var(--primary);
   color: white;
   display: flex;
   justify-content: center;
@@ -374,7 +374,7 @@
 }
 
 .successBtn {
-  background: linear-gradient(135deg, var(--success), #059669);
+  background: var(--success);
   color: white;
   display: flex;
   justify-content: center;
@@ -474,9 +474,42 @@
   color: #fff;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .container {
     flex-direction: column;
     height: auto;
+  }
+  
+  .cartSection {
+    min-width: 100%;
+  }
+
+  .productGrid {
+    max-height: 50vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .filters {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .productGrid {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    gap: 1rem;
+    max-height: auto;
+  }
+  .receiptCard {
+    padding: 2rem 1.5rem;
+    width: 95%;
+  }
+  .modalContent {
+    padding: 2rem 1.5rem;
+    width: 95%;
   }
 }

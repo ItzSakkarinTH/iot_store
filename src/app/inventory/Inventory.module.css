@@ -18,7 +18,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.85rem 1.75rem;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: var(--radius-lg);
@@ -160,15 +160,30 @@
 
 /* Mobile responsive */
 @media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+  .actions {
+    width: 100%;
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+  .searchBar {
+    width: 100%;
+  }
+  .addProductBtn {
+    width: 100%;
+    justify-content: center;
+  }
   .tableHeader {
     display: none;
   }
-
   .table, .table tbody, .table tr, .table td {
     display: block;
     width: 100%;
   }
-
   .table tr {
     margin-bottom: 1.5rem;
     border: 1px solid var(--glass-border);
@@ -176,7 +191,6 @@
     padding: 1rem;
     background: rgba(255, 255, 255, 0.02);
   }
-
   .table td {
     padding: 0.75rem 0;
     text-align: right;
@@ -184,13 +198,11 @@
     position: relative;
     padding-left: 50%;
   }
-
   .table td:last-child {
     border-bottom: none;
     display: flex;
     justify-content: flex-end;
   }
-
   .table td::before {
     content: attr(data-label);
     position: absolute;
@@ -201,11 +213,11 @@
     text-align: left;
     color: var(--text-muted);
   }
-
   .tableWrapper {
     border: none;
     background: transparent;
     box-shadow: none;
     backdrop-filter: none;
+    padding: 0;
   }
 }

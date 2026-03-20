@@ -93,21 +93,59 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 0;
 }
 
-.heroImg {
+.carouselWrapper {
+  position: relative;
   width: 100%;
-  height: auto;
+  max-width: 600px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius-xl);
+  overflow: hidden;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
   border: 1px solid var(--glass-border);
-  z-index: 2;
+}
+
+.carouselItemAbsolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.indicators {
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
   transition: var(--transition);
 }
 
-.heroImg:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: var(--glass-shadow), 0 0 40px var(--primary-glow);
+.activeDot {
+  background: var(--primary);
+  width: 24px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.carouselImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .imageGlow {
@@ -115,11 +153,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-  z-index: 1;
-  filter: blur(50px);
+  display: none;
 }
 
 .badge {
@@ -150,7 +184,7 @@
 }
 
 .highlight {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background: var(--primary);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -175,7 +209,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: var(--primary);
   color: white;
   padding: 1.2rem 2.5rem;
   border-radius: var(--radius-lg);
@@ -244,7 +278,7 @@
   justify-content: center;
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, var(--primary-light), rgba(255,255,255,0.05));
+  background: var(--primary-light);
   color: var(--primary);
   border-radius: var(--radius-lg);
   margin-bottom: 2rem;

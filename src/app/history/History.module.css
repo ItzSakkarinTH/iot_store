@@ -186,18 +186,27 @@
     align-items: flex-start;
     gap: 1.5rem;
   }
-  
   .searchBar {
     width: 100%;
   }
-  
   .orderBody {
     flex-direction: column;
     gap: 1.5rem;
   }
-  
+  .orderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
   .orderSummary {
     align-items: flex-start;
     margin-top: 1rem;
+    width: 100%;
+  }
+  .orderCard {
+    padding: 1.25rem;
+  }
+  .listContainer {
+    gap: 1rem;
   }
 }
