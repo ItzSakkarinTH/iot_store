@@ -41,18 +41,6 @@ export default function Dashboard() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
     >
-      <div className={styles.topBanner}>
-         <div className={styles.bannerContent}>
-            <div className={styles.bannerIcon}><Sparkles className={styles.pulseIcon} /></div>
-            <div>
-              <p className={styles.bannerTitle}>ยินดีด้วย! คุณได้รับสิทธิ์ <strong>Ultra</strong> ฟรี 7 วัน</p>
-              <p className={styles.bannerSubtitle}>พิเศษสุด ๆ เข้าร่วมครบ 7 วันแล้วรับเพิ่มสิทธิ์ Ultra เพิ่มอีก 1 เดือน</p>
-            </div>
-         </div>
-         <button className={styles.bannerBtn}>
-           <Gift size={16} /> รับสิทธิ์เลย
-         </button>
-      </div>
 
       <header className={styles.header}>
         <h1 className={styles.title}>ยินดีต้อนรับกลับมา!</h1>

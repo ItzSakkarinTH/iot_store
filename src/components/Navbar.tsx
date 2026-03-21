@@ -10,9 +10,9 @@ import { useStore } from "@/store/useStore";
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { cart } = useStore();
+  const { cart, setIsCartOpen } = useStore();
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0);
-  
+
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     if (typeof window !== 'undefined') {
       return !!localStorage.getItem("token");
@@ -21,6 +21,9 @@ export default function Navbar() {
   });
   const [userRole, setUserRole] = useState<string | null>(null);
 
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
   useEffect(() => {
     const checkLogin = () => {
       setIsLoggedIn(!!localStorage.getItem("token"));
@@ -28,6 +31,26 @@ export default function Navbar() {
     };
     checkLogin();
   }, [pathname]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Hide if scrolling down and not near the top
+      if (currentScrollY > 60 && currentScrollY > lastScrollY) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -38,7 +61,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={styles.navbar}>
+    <nav className={`${styles.navbar} ${isVisible ? '' : styles.navHidden}`}>
       <Link href="/" className={styles.logoArea}>
         <Sparkles className={styles.logoIcon} size={24} />
         <span>UltraStore</span>
@@ -49,7 +72,7 @@ export default function Navbar() {
           <LayoutGrid size={18} /> หน้าแรก
         </Link>
         <Link href="/shop" className={`${styles.navLink} ${pathname === "/shop" ? styles.active : ""}`}>
-          <Search size={18} /> Discovery
+          <Search size={18} /> สินค้า
         </Link>
         {isLoggedIn && userRole === "admin" && (
           <Link href="/dashboard" className={`${styles.navLink} ${pathname.startsWith("/dashboard") ? styles.active : ""}`}>
@@ -68,18 +91,18 @@ export default function Navbar() {
       </div>
 
       <div className={styles.userArea}>
-        <Link href="/shop" className={styles.cartBtn}>
+        <Link href="/cart" className={styles.cartBtn}>
           <ShoppingCart size={22} />
           {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
         </Link>
-        
+
         {isLoggedIn ? (
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <div className={styles.profile}>
               <div className={styles.avatar}>{userRole === "admin" ? "A" : "U"}</div>
               <span>{userRole === "admin" ? "Admin" : "Customer"}</span>
             </div>
-            <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}>
+            <button onClick={handleLogout} className={styles.logoutTextBtn}>
               ออกจากระบบ
             </button>
           </div>

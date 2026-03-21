@@ -52,12 +52,16 @@ export interface StoreState {
   fetchMembers: () => Promise<void>;
   members: Member[];
   addMember: (member: Member) => void;
+  isCartOpen: boolean;
+  setIsCartOpen: (isOpen: boolean) => void;
 }
 
 export const useStore = create<StoreState>((set, get) => ({
   products: [],
   cart: [],
   orders: [],
+  isCartOpen: false,
+  setIsCartOpen: (isOpen) => set({ isCartOpen: isOpen }),
   
   setProducts: (products) => set({ products }),
   

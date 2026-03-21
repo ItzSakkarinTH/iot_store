@@ -9,32 +9,38 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--glass-border);
   padding-bottom: 1rem;
 }
 
 .addBtn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background-color: var(--primary);
+  gap: 0.75rem;
+  padding: 0.85rem 1.75rem;
+  background: var(--primary);
   color: white;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: background-color 0.2s;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px var(--primary-glow);
+  cursor: pointer;
 }
 
 .addBtn:hover {
-  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--primary-glow);
 }
 
 .tableWrapper {
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  box-shadow: var(--glass-shadow);
 }
 
 .table {
@@ -43,17 +49,26 @@
 }
 
 .table th, .table td {
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 1.75rem;
   text-align: left;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .table th {
-  background-color: var(--primary-light);
-  color: var(--primary-dark);
-  font-weight: 600;
+  background: rgba(0, 0, 0, 0.02);
+  color: var(--text-primary);
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.table tr {
+  transition: var(--transition);
+}
+
+.table tr:hover {
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .table tr:last-child td {
@@ -62,14 +77,19 @@
 
 .input {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--border);
-  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-primary);
+  transition: var(--transition);
 }
 
 .input:focus {
   border-color: var(--primary);
   outline: none;
+  box-shadow: 0 0 0 2px var(--primary-light);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .actions {
@@ -78,96 +98,111 @@
 }
 
 .editBtn, .delBtn, .saveBtn, .cancelBtn {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  transition: all 0.2s;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition: var(--transition);
+  cursor: pointer;
+  background: transparent;
 }
 
-.editBtn { color: #60a5fa; background-color: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); }
-.editBtn:hover { background-color: rgba(59,130,246,0.2); }
+.editBtn { color: var(--primary); background: var(--primary-light); }
+.editBtn:hover { background: var(--primary); color: white; box-shadow: 0 4px 15px var(--primary-glow); }
 
-.delBtn { color: #f87171; background-color: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); }
-.delBtn:hover { background-color: rgba(239,68,68,0.2); }
+.delBtn { color: var(--danger); background: rgba(239,68,68,0.1); }
+.delBtn:hover { background: var(--danger); color: white; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); }
 
-.saveBtn { color: #34d399; background-color: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); }
-.saveBtn:hover { background-color: rgba(16,185,129,0.2); }
+.saveBtn { color: var(--success); background: rgba(16,185,129,0.1); }
+.saveBtn:hover { background: var(--success); color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
 
-.cancelBtn { color: var(--text-muted); background-color: rgba(148,163,184,0.1); border-color: rgba(148,163,184,0.3); }
-.cancelBtn:hover { background-color: rgba(148,163,184,0.2); }
+.cancelBtn { color: var(--text-muted); background: rgba(148,163,184,0.1); }
+.cancelBtn:hover { background: rgba(255,255,255,0.1); color: white; }
 
 .stockBadge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
   background-color: var(--primary-light);
-  color: var(--primary-dark);
+  color: var(--primary);
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .lowStock {
-  background-color: rgba(249,115,22,0.1);
-  color: #fb923c;
-  border: 1px solid rgba(249,115,22,0.3);
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+  border-color: rgba(245, 158, 11, 0.3);
 }
 
 .priceCol {
-  font-weight: 600;
-  color: var(--primary-dark);
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .productThumb {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .fileInput {
-  max-width: 150px;
-  font-size: 0.75rem;
+  max-width: 180px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
-/* Mobile responsive - Convert table to cards */
+/* Mobile responsive */
 @media (max-width: 768px) {
-  .tableHeader {
-    display: none; /* Hide header rows */
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
   }
-
+  .actions {
+    width: 100%;
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+  .searchBar {
+    width: 100%;
+  }
+  .addProductBtn {
+    width: 100%;
+    justify-content: center;
+  }
+  .tableHeader {
+    display: none;
+  }
   .table, .table tbody, .table tr, .table td {
     display: block;
     width: 100%;
   }
-
   .table tr {
-    margin-bottom: 1rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
     padding: 1rem;
-    background: var(--surface);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    background: rgba(0, 0, 0, 0.02);
   }
-
   .table td {
-    padding: 0.5rem 0;
+    padding: 0.75rem 0;
     text-align: right;
-    border-bottom: 1px dashed var(--border);
+    border-bottom: 1px dashed var(--glass-border);
     position: relative;
-    padding-left: 50%; /* Make space for pseudo-element labels */
+    padding-left: 50%;
   }
-
   .table td:last-child {
     border-bottom: none;
     display: flex;
     justify-content: flex-end;
   }
-
-  /* Labels for mobile cards */
   .table td::before {
     content: attr(data-label);
     position: absolute;
@@ -178,10 +213,11 @@
     text-align: left;
     color: var(--text-muted);
   }
-
   .tableWrapper {
     border: none;
     background: transparent;
     box-shadow: none;
+    backdrop-filter: none;
+    padding: 0;
   }
 }

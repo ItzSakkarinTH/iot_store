@@ -5,26 +5,30 @@
   gap: 1.5rem;
   z-index: 100;
   overflow-y: auto;
-  /* hide scrollbar for sidebar */
   scrollbar-width: none; 
 }
+
 .desktopSidebar::-webkit-scrollbar {
   display: none;
 }
 
 .navGroup {
   background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
   padding: 1rem 0.5rem;
+  box-shadow: var(--glass-shadow);
 }
 
 .groupTitle {
   font-size: 0.75rem;
   color: var(--text-muted);
-  font-weight: 500;
+  font-weight: 700;
   padding: 0 1rem 0.75rem;
   text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
 .nav {
@@ -42,36 +46,44 @@
   color: var(--text-muted);
   font-weight: 500;
   font-size: 0.95rem;
-  transition: all 0.2s;
-  border-radius: 12px;
+  transition: var(--transition);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
 }
 
 .navItem:hover {
-  background-color: rgba(255, 255, 255, 0.05); /* very light hover on dark bg */
+  background-color: rgba(0, 0, 0, 0.05);
   color: var(--text-main);
+  transform: translateX(4px);
 }
 
 .navItem.active {
   color: #ffffff;
-  background-color: #1e293b; /* A lighter dark blue for active panel */
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--primary-light);
+  border: 1px solid var(--primary-glow);
+  box-shadow: 0 0 15px var(--primary-light);
 }
 
 .icon {
   color: var(--text-muted);
+  transition: var(--transition);
 }
 
 .activeIcon {
-  color: #ffffff; /* Active icon in the picture looks white */
+  color: var(--primary);
+  filter: drop-shadow(0 0 5px var(--primary-glow));
 }
 
-/* Bottom Nav - Logout */
 .bottomNav {
   background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
   padding: 1rem;
   margin-top: auto;
+  box-shadow: var(--glass-shadow);
 }
 
 .logoutBtn {
@@ -83,17 +95,18 @@
   padding: 0.75rem;
   border: 1px solid rgba(239, 68, 68, 0.3);
   background-color: rgba(239, 68, 68, 0.1);
-  color: #ef4444; /* red */
-  border-radius: 12px;
+  color: var(--danger); 
+  border-radius: var(--radius-md);
   font-weight: 600;
-  transition: all 0.2s;
+  transition: var(--transition);
 }
 
 .logoutBtn:hover {
   background-color: rgba(239, 68, 68, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
 }
 
-/* Mobile Nav Styles */
 .mobileNav {
   display: none;
   position: fixed;
@@ -101,8 +114,11 @@
   left: 0;
   width: 100vw;
   background-color: var(--surface);
-  border-top: 1px solid var(--border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-top: 1px solid var(--glass-border);
   z-index: 1000;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
 }
 
 .mobileNavItem {
@@ -111,9 +127,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 0;
+  padding: 0.75rem 0;
   position: relative;
   color: var(--text-muted);
+  transition: var(--transition);
 }
 
 .mobileActive {
@@ -123,15 +140,17 @@
 .activeIndicator {
   position: absolute;
   top: 0;
-  width: 50%;
-  height: 3px;
+  width: 40%;
+  height: 4px;
   background-color: var(--primary);
-  border-radius: 0 0 4px 4px;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 10px var(--primary-glow);
 }
 
 .mobileLabel {
-  font-size: 0.65rem;
-  margin-top: 4px;
+  font-size: 0.7rem;
+  margin-top: 6px;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {

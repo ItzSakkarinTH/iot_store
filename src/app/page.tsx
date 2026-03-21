@@ -1,12 +1,24 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight, ShoppingBag, Zap, Globe, Truck } from "lucide-react";
 import styles from "./Landing.module.css";
 import Image from "next/image";
 
+const images = ["/allcar1.jpg", "/test_car1.jpg", "/testcar2.jpg", "/testcar3.jpg"];
+
 export default function LandingPage() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 4500); // Wait 4.5 seconds to show frame
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -48,14 +60,37 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
           >
             <div className={styles.imageGlow}></div>
-            <Image 
-              src="/store_hero_banner_1773747636931.png" 
-              alt="UltraStore Hero" 
-              className={styles.heroImg}
-              width={600}
-              height={400}
-              priority
-            />
+            <div className={styles.carouselWrapper}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  initial={{ opacity: 0, x: 50, filter: "blur(5px)" }}
+                  animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, x: -50, filter: "blur(5px)" }}
+                  transition={{ duration: 0.8, ease: "easeInOut" }}
+                  className={styles.carouselItemAbsolute}
+                >
+                  <Image 
+                    src={images[currentIndex]} 
+                    alt={`UltraStore Showcase ${currentIndex + 1}`} 
+                    className={styles.carouselImg}
+                    width={600}
+                    height={400}
+                    unoptimized
+                    priority={currentIndex === 0}
+                  />
+                </motion.div>
+              </AnimatePresence>
+              
+              <div className={styles.indicators}>
+                {images.map((_, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`${styles.dot} ${idx === currentIndex ? styles.activeDot : ''}`}
+                  />
+                ))}
+              </div>
+            </div>
           </motion.div>
         </div>
 

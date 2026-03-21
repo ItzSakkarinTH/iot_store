@@ -10,14 +10,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #1e3a8a;
-  border-radius: 16px;
-  padding: 1.5rem 2rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  background: var(--primary);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  box-shadow: 0 10px 30px var(--primary-glow);
   color: white;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--glass-border);
   position: relative;
-  overflow: hidden;
+}
+
+.topBanner::after {
+  display: none;
 }
 
 .bannerContent {
@@ -29,8 +32,9 @@
 }
 
 .bannerIcon {
-  font-size: 2rem;
-  color: #fbbf24; /* gold */
+  font-size: 2.5rem;
+  color: #fbbf24;
+  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.5));
 }
 
 .pulseIcon {
@@ -38,27 +42,28 @@
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
+  0% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.5)); }
+  50% { transform: scale(1.1); opacity: 0.9; filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.8)); }
+  100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.5)); }
 }
 
 .bannerTitle {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 500;
   margin-bottom: 0.25rem;
 }
 
 .bannerTitle strong {
-  color: #60a5fa; /* bright blue */
-  font-size: 1.5rem;
+  color: #fff;
+  font-size: 1.6rem;
   font-style: italic;
   font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .bannerSubtitle {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  color: rgba(0, 0, 0, 0.9);
 }
 
 .bannerBtn {
@@ -66,16 +71,18 @@
   align-items: center;
   gap: 0.5rem;
   background-color: white;
-  color: #1e3a8a;
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
+  color: var(--primary-dark);
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-pill);
   font-weight: 700;
   z-index: 2;
-  transition: transform 0.2s;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 .bannerBtn:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
 /* Header Text */
@@ -84,8 +91,10 @@
 }
 
 .title {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
@@ -109,15 +118,18 @@
 
 .rightCol {
   flex: 1;
-  min-width: 300px;
+  min-width: 320px;
 }
 
 /* Panels */
 .panelSection {
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem;
+  box-shadow: var(--glass-shadow);
 }
 
 .sectionHeader {
@@ -127,31 +139,39 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  color: white;
+  color: var(--text-primary);
 }
 
 .sectionSub {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
-  font-weight: 400;
+  font-weight: 500;
 }
 
 /* Stats */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
 }
 
 .statBox {
-  background-color: #1a1e2d;
-  border: 1px solid #2d3b55;
-  border-radius: 12px;
-  padding: 1rem;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 1rem;
+  transition: var(--transition);
+}
+
+.statBox:hover {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
 .statLabelRow {
@@ -161,58 +181,63 @@
 }
 
 .statLabelRow p {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   line-height: 1.4;
 }
 
 .statLabelRow p span {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
-  font-weight: 400;
+  font-weight: 500;
+  display: block;
+  margin-top: 0.25rem;
 }
 
 .badge {
-  background-color: white;
-  color: black;
-  font-size: 0.7rem;
-  padding: 0.1rem 0.6rem;
-  border-radius: 9999px;
-  font-weight: 600;
+  background-color: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .statBox h3 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: white;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
 }
 
 .statBox h3 span {
   font-size: 1rem;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--text-muted);
 }
 
 /* Chart Panel */
 .panelSectionChart {
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem;
+  box-shadow: var(--glass-shadow);
 }
 
 .chartHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .chartTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: white;
+  color: var(--text-primary);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -221,38 +246,41 @@
 .chartFilters {
   display: flex;
   gap: 0.5rem;
-  background-color: #1a1e2d;
-  padding: 0.25rem;
-  border-radius: 20px;
-  border: 1px solid var(--border);
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.35rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
 }
 
 .filterBtn {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  padding: 0.35rem 0.8rem;
-  border-radius: 20px;
-  transition: all 0.2s;
-}
-
-.filterActive {
-  background-color: white;
-  color: black;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-pill);
+  transition: var(--transition);
   font-weight: 600;
 }
 
+.filterActive {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 2px 10px var(--primary-glow);
+}
+
 .chartContainer {
-  height: 250px;
+  height: 280px;
   width: 100%;
 }
 
 /* Recent Orders Right Panel */
 .recentPanel {
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem;
   height: 100%;
+  box-shadow: var(--glass-shadow);
 }
 
 .recentHeader {
@@ -260,8 +288,9 @@
 }
 
 .recentHeader h2 {
-  font-size: 1.1rem;
-  color: white;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  font-weight: 700;
 }
 
 .recentList {
@@ -271,31 +300,38 @@
 }
 
 .recentItemMock {
-  background-color: #1a1e2d;
-  border: 1px solid #2d3b55;
-  border-radius: 12px;
-  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  transition: var(--transition);
+}
+
+.recentItemMock:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+  border-color: var(--primary-light);
+  transform: translateX(4px);
 }
 
 .recentHead {
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .recentName {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: white;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
 .recentDate {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .recentRow {
@@ -305,17 +341,18 @@
 }
 
 .recentMsg {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
 }
 
 .recentAmountBadge {
-  background-color: white;
-  color: black;
-  font-size: 0.85rem;
+  background-color: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.9rem;
   font-weight: 700;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
 /* Responsive */
@@ -327,10 +364,35 @@
   .bannerContent {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 1rem;
   }
-  
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .userProfile {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .banner {
+    padding: 1.5rem;
+  }
   .statsGrid {
     grid-template-columns: 1fr;
+  }
+  .panelSection, .panelSectionChart, .recentPanel {
+    padding: 1.25rem;
+  }
+  .chartHeader {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .chartFilters {
+    width: 100%;
+    justify-content: space-between;
   }
 }
