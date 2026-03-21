@@ -80,12 +80,9 @@ export default function Navbar() {
           </Link>
         )}
         <Link href="#" className={styles.navLink}>
-          <BookOpen size={18} /> วิธีใช้งาน
+          <BookOpen size={18} /> ประวัติการสั่งซื้อ
         </Link>
-        <Link href="#" className={styles.navLink}>
-          <Sparkles size={18} /> แพลน
-        </Link>
-        <Link href="#" className={styles.navLink}>
+        <Link href="/contact" className={`${styles.navLink} ${pathname === "/contact" ? styles.active : ""}`}>
           <Phone size={18} /> ติดต่อ
         </Link>
       </div>
