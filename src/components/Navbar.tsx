@@ -12,7 +12,7 @@ export default function Navbar() {
   const router = useRouter();
   const { cart, setIsCartOpen } = useStore();
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0);
-  
+
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     if (typeof window !== 'undefined') {
       return !!localStorage.getItem("token");
@@ -37,14 +37,14 @@ export default function Navbar() {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Hide if scrolling down and not near the top
       if (currentScrollY > 60 && currentScrollY > lastScrollY) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
       }
-      
+
       setLastScrollY(currentScrollY);
     };
 
@@ -72,7 +72,7 @@ export default function Navbar() {
           <LayoutGrid size={18} /> หน้าแรก
         </Link>
         <Link href="/shop" className={`${styles.navLink} ${pathname === "/shop" ? styles.active : ""}`}>
-          <Search size={18} /> Discovery
+          <Search size={18} /> สินค้า
         </Link>
         {isLoggedIn && userRole === "admin" && (
           <Link href="/dashboard" className={`${styles.navLink} ${pathname.startsWith("/dashboard") ? styles.active : ""}`}>
@@ -95,7 +95,7 @@ export default function Navbar() {
           <ShoppingCart size={22} />
           {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
         </Link>
-        
+
         {isLoggedIn ? (
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <div className={styles.profile}>
