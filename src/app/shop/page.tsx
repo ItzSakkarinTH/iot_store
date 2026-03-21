@@ -2,13 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useStore } from "@/store/useStore";
-import { ShoppingCart, Plus, X } from "lucide-react";
+import { ShoppingCart, Plus } from "lucide-react";
 import styles from "./Shop.module.css";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function ShopPage() {
-  const { products, cart, addToCart, updateCartQuantity, cartTotal, fetchProducts, clearCart, addOrder } = useStore();
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const router = useRouter();
+  const { 
+    products, cart, addToCart, fetchProducts, cartTotal
+  } = useStore();
   const [category, setCategory] = useState("All");
 
   useEffect(() => {
@@ -17,30 +20,6 @@ export default function ShopPage() {
 
   const categories = ["All", ...Array.from(new Set(products.map(p => p.category)))];
   const filteredProducts = category === "All" ? products : products.filter(p => p.category === category);
-
-  const handleCheckout = async () => {
-    try {
-      const res = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          items: cart, 
-          total: cartTotal(), 
-          paymentMethod: 'Online Payment' 
-        })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      
-      addOrder(data);
-      clearCart();
-      setIsCartOpen(false);
-      alert("สั่งซื้อสำเร็จ!");
-    } catch (err) {
-      console.error(err);
-      alert("เกิดข้อผิดพลาดในการสั่งซื้อ");
-    }
-  };
 
   return (
     <div className={styles.container}>
@@ -100,7 +79,7 @@ export default function ShopPage() {
           className={styles.cartPanel}
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          onClick={() => setIsCartOpen(true)}
+          onClick={() => router.push('/cart')}
         >
           <ShoppingCart />
           <span>{cart.length} รายการ | ฿{cartTotal().toLocaleString()}</span>
@@ -146,7 +125,11 @@ export default function ShopPage() {
                   <span>ยอดรวมทั้งสิ้น</span>
                   <span>฿{cartTotal().toLocaleString()}</span>
                 </div>
-                <button className={styles.checkoutBtn} onClick={handleCheckout}>
+                <button 
+                  className={styles.checkoutBtn} 
+                  onClick={handleCheckout}
+                  disabled={cart.length === 0}
+                >
                   ยืนยันการสั่งซื้อ
                 </button>
               </div>

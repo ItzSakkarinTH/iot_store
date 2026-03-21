@@ -10,7 +10,7 @@ import { useStore } from "@/store/useStore";
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { cart } = useStore();
+  const { cart, setIsCartOpen } = useStore();
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0);
   
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -91,7 +91,7 @@ export default function Navbar() {
       </div>
 
       <div className={styles.userArea}>
-        <Link href="/shop" className={styles.cartBtn}>
+        <Link href="/cart" className={styles.cartBtn}>
           <ShoppingCart size={22} />
           {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
         </Link>
