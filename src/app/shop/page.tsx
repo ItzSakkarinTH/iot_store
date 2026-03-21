@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useStore } from "@/store/useStore";
-import { ShoppingCart, Plus } from "lucide-react";
+import { useStore, Product } from "@/store/useStore";
 import styles from "./Shop.module.css";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { ShoppingCart, Plus, Minus, CheckCircle, X, ShoppingBag } from "lucide-react";
 
 export default function ShopPage() {
   const router = useRouter();
@@ -13,6 +13,22 @@ export default function ShopPage() {
     products, cart, addToCart, fetchProducts, cartTotal
   } = useStore();
   const [category, setCategory] = useState("All");
+  const [showToast, setShowToast] = useState(false);
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+
+  const updateQty = (id: string, val: number, stock: number) => {
+    setQuantities(prev => ({
+      ...prev,
+      [id]: Math.max(1, Math.min(stock, (prev[id] || 1) + val))
+    }));
+  };
+
+  const handleAddToCart = (product: Product) => {
+    const qty = quantities[product._id] || 1;
+    addToCart(product, qty);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -44,34 +60,81 @@ export default function ShopPage() {
         </div>
 
         <div className={styles.grid}>
-          {filteredProducts.map(product => (
-            <motion.div 
-              key={product._id} 
-              className={styles.productCard}
-              whileHover={{ y: -5 }}
-            >
-              <div className={styles.imagePlaceholder}>
-                {product.image ? (
-                  <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <ShoppingCart size={48} />
-                )}
-              </div>
-              <div className={styles.cardBody}>
-                <span className={styles.category}>{product.category}</span>
-                <h3 className={styles.name}>{product.name}</h3>
-                <p className={styles.sku}>SKU: {product.sku}</p>
-                <div className={styles.priceRow}>
-                  <span className={styles.price}>฿{product.price.toLocaleString()}</span>
-                  <button className={styles.addBtn} onClick={() => addToCart(product)}>
-                    <Plus size={20} />
-                  </button>
+          {filteredProducts.map(product => {
+            const qty = quantities[product._id] || 1;
+            const isOutOfStock = product.stock <= 0;
+            
+            return (
+              <motion.div 
+                key={product._id} 
+                className={`${styles.productCard} ${isOutOfStock ? styles.outOfStockCard : ""}`}
+                whileHover={!isOutOfStock ? { y: -8, scale: 1.02 } : {}}
+              >
+                <div className={styles.imagePlaceholder}>
+                  {product.image ? (
+                    <img src={product.image} alt={product.name} className={styles.productImg} />
+                  ) : (
+                    <ShoppingBag size={48} color="#cbd5e1" />
+                  )}
+                  {isOutOfStock && <div className={styles.badge}>สินค้าหมด</div>}
                 </div>
-              </div>
-            </motion.div>
-          ))}
+                
+                <div className={styles.cardBody}>
+                  <h3 className={styles.name}>{product.name}</h3>
+                  <p className={styles.sku}>รายละเอียดเพิ่มเติมคลิกดูได้เลยจ้า</p>
+                  
+                  <div className={styles.infoRow}>
+                    <span className={`${styles.stockStatus} ${isOutOfStock ? styles.lowStock : ""}`}>
+                      เหลือ : {product.stock} ชิ้น
+                    </span>
+                    <div className={styles.pricePill}>
+                      {product.price.toLocaleString()} ฿
+                    </div>
+                  </div>
+
+                  {!isOutOfStock && (
+                    <>
+                      <div className={styles.qtyRow}>
+                        <span className={styles.qtyLabel}>จำนวนที่ต้องการ</span>
+                        <div className={styles.qtyPicker}>
+                          <button className={styles.qtyBtn} onClick={() => updateQty(product._id, -1, product.stock)}><Minus size={14}/></button>
+                          <span className={styles.qtyVal}>{qty}</span>
+                          <button className={styles.qtyBtn} onClick={() => updateQty(product._id, 1, product.stock)}><Plus size={14}/></button>
+                        </div>
+                      </div>
+                      <button 
+                        className={styles.buyBtn} 
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        <ShoppingCart size={18} /> สั่งซื้อตอนนี้เลย
+                      </button>
+                    </>
+                  )}
+
+                  {isOutOfStock && (
+                    <button className={styles.outOfStockBtn} disabled>
+                      <X size={18} /> สินค้าหมด
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </main>
+
+      <AnimatePresence>
+        {showToast && (
+          <motion.div 
+            className={styles.toast}
+            initial={{ opacity: 0, y: 50, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 20, x: "-50%" }}
+          >
+            <CheckCircle size={20} /> เพิ่มสินค้าลงตะกร้าแล้ว!
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Floating Cart Button */}
       {cart.length > 0 && (
