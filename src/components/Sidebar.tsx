@@ -9,7 +9,8 @@ import {
   History,
   Users,
   LogOut,
-  Sparkles
+  Sparkles,
+  Box
 } from "lucide-react";
 import styles from "./Sidebar.module.css";
 import { motion } from "framer-motion";
@@ -22,7 +23,7 @@ const navGroups = [
       { href: "/dashboard", label: "แผงควบคุม Dashboard", Icon: LayoutDashboard },
       { href: "/pos", label: "ระบบขายหน้าร้าน POS", Icon: ShoppingBag },
       { href: "/inventory", label: "จัดการข้อมูลสินค้า", Icon: PackageSearch },
-      { href: "/history", label: "ประวัติการทำรายการ", Icon: History },
+      { href: "/admin-orders", label: "รายการคำสั่งซื้อ", Icon: Box },
       { href: "/loyalty", label: "ระบบสมาชิก CRM", Icon: Users },
     ],
   }

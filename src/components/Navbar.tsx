@@ -79,13 +79,17 @@ export default function Navbar() {
             <ShieldCheck size={18} /> จัดการร้านค้า
           </Link>
         )}
-        <Link href="#" className={styles.navLink}>
-          <BookOpen size={18} /> วิธีใช้งาน
-        </Link>
-        <Link href="#" className={styles.navLink}>
-          <Sparkles size={18} /> แพลน
-        </Link>
-        <Link href="#" className={styles.navLink}>
+        {(!isLoggedIn || userRole !== "admin") && (
+          <Link href="/history" className={`${styles.navLink} ${pathname === "/history" ? styles.active : ""}`}>
+            <BookOpen size={18} /> ประวัติการสั่งซื้อ
+          </Link>
+        )}
+        {isLoggedIn && userRole === "admin" && (
+          <Link href="/admin-orders" className={`${styles.navLink} ${pathname === "/admin-orders" ? styles.active : ""}`}>
+            <BookOpen size={18} /> รายการคำสั่งซื้อใหม่
+          </Link>
+        )}
+        <Link href="/contact" className={`${styles.navLink} ${pathname === "/contact" ? styles.active : ""}`}>
           <Phone size={18} /> ติดต่อ
         </Link>
       </div>
