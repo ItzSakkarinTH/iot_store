@@ -12,6 +12,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   try {
     const blob = await put(filename, request.body, {
       access: 'public',
+      token: process.env.iot_READ_WRITE_TOKEN,
     });
 
     return NextResponse.json(blob);

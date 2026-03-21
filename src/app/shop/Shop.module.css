@@ -103,21 +103,21 @@
 
 .productCard {
   background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--card-border);
-  border-radius: var(--border-radius);
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: var(--transition);
+  box-shadow: var(--glass-shadow);
   display: flex;
   flex-direction: column;
 }
 
 .productCard:hover {
   transform: translateY(-8px);
-  border-color: var(--card-hover-border);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 0 25px var(--primary-glow);
 }
 
 /* Image Placeholder */

@@ -20,7 +20,13 @@ export default function CartPage() {
     try {
       const token = localStorage.getItem("token");
       const orderData = {
-        items: cart.map(item => ({ product: item._id, quantity: item.quantity, price: item.price })),
+        items: cart.map(item => ({ 
+          productId: item._id, 
+          name: item.name, 
+          image: item.image, 
+          quantity: item.quantity, 
+          price: item.price 
+        })),
         total: cartTotal(),
         paymentMethod: "Credit Card",
         status: "Completed",

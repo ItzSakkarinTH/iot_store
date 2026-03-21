@@ -119,15 +119,26 @@ export default function InventoryView() {
           <tbody>
             {(isAdding && editingId === "new") && (
               <tr className={styles.editingRow}>
-                <td>
-                  {editForm.image && <img src={editForm.image} className={styles.productThumb} alt="preview" />}
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
-                    className={styles.fileInput}
-                  />
-                  {uploading && <span style={{fontSize: '0.7rem'}}>กำลังอัพโหลด...</span>}
+                <td className={styles.imageEditCell}>
+                  <div className={styles.uploadPreview}>
+                    {editForm.image ? (
+                      <img src={editForm.image} className={styles.productThumb} alt="preview" />
+                    ) : (
+                      <div className={styles.productThumbPlaceholder}>
+                        <Plus size={20} />
+                      </div>
+                    )}
+                    <label className={styles.uploadLabel}>
+                      <span>{uploading ? "กำลังอัพโหลด..." : "เปลี่ยนรูป"}</span>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
+                        className={styles.hiddenFileInput}
+                        disabled={uploading}
+                      />
+                    </label>
+                  </div>
                 </td>
                 <td><input name="name" value={editForm.name} onChange={handleChange} className={styles.input} placeholder="ชื่อสินค้า" /></td>
                 <td><input name="sku" value={editForm.sku} onChange={handleChange} className={styles.input} placeholder="SKU" /></td>
@@ -144,15 +155,26 @@ export default function InventoryView() {
               <tr key={product._id} className={editingId === product._id ? styles.editingRow : ""}>
                 {editingId === product._id ? (
                   <>
-                    <td>
-                      {editForm.image && <img src={editForm.image} className={styles.productThumb} alt="preview" />}
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
-                        className={styles.fileInput}
-                      />
-                      {uploading && <span style={{fontSize: '0.7rem'}}>กำลังอัพโหลด...</span>}
+                    <td className={styles.imageEditCell}>
+                      <div className={styles.uploadPreview}>
+                        {editForm.image ? (
+                          <img src={editForm.image} className={styles.productThumb} alt="preview" />
+                        ) : (
+                          <div className={styles.productThumbPlaceholder}>
+                            <Plus size={20} />
+                          </div>
+                        )}
+                        <label className={styles.uploadLabel}>
+                          <span>{uploading ? "กำลังอัพโหลด..." : "เปลี่ยนรูป"}</span>
+                          <input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
+                            className={styles.hiddenFileInput}
+                            disabled={uploading}
+                          />
+                        </label>
+                      </div>
                     </td>
                     <td data-label="ชื่อสินค้า"><input name="name" value={editForm.name} onChange={handleChange} className={styles.input} /></td>
                     <td data-label="SKU"><input name="sku" value={editForm.sku} onChange={handleChange} className={styles.input} /></td>
