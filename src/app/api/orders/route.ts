@@ -26,7 +26,10 @@ export async function POST(req: NextRequest) {
     
     // Reduce stock for each item
     for (const item of items) {
-       await Product.findByIdAndUpdate(item._id, { $inc: { stock: -item.quantity } });
+       const idToUse = item.productId || item._id;
+       if (idToUse) {
+         await Product.findByIdAndUpdate(idToUse, { $inc: { stock: -item.quantity } });
+       }
     }
     
     return NextResponse.json(order, { status: 201 });

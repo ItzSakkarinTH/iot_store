@@ -136,9 +136,39 @@
 .itemRow {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 0.95rem;
   color: var(--text-primary);
   font-weight: 500;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.itemMain {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.miniThumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--glass-border);
+}
+
+.miniThumbPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px dashed var(--glass-border);
+}
+
+.itemNameText {
+  font-weight: 600;
 }
 
 .itemSum {

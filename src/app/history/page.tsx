@@ -58,8 +58,15 @@ export default function HistoryView() {
                 <div className={styles.itemsList}>
                   {order.items.map((item: CartItem) => (
                     <div key={item._id} className={styles.itemRow}>
-                      <span>{item.quantity}x {item.name}</span>
-                      <span className={styles.itemSum}>฿{item.price * item.quantity}</span>
+                      <div className={styles.itemMain}>
+                        {item.image ? (
+                          <img src={item.image} className={styles.miniThumb} alt={item.name} />
+                        ) : (
+                          <div className={styles.miniThumbPlaceholder} />
+                        )}
+                        <span className={styles.itemNameText}>{item.quantity}x {item.name}</span>
+                      </div>
+                      <span className={styles.itemSum}>฿{(item.price * item.quantity).toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
