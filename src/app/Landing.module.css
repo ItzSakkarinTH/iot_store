@@ -41,7 +41,7 @@
 
 .loginLink:hover {
   color: var(--text-primary);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .registerBtn {
@@ -129,7 +129,7 @@
 .dot {
   width: 10px;
   height: 10px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   transition: var(--transition);
 }
@@ -242,7 +242,7 @@
 
 .secondaryBtn:hover {
   background: var(--surface-hover);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(0, 0, 0, 0.2);
   transform: translateY(-4px);
 }
 

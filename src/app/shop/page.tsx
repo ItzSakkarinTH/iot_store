@@ -86,57 +86,6 @@ export default function ShopPage() {
         </motion.div>
       )}
 
-      {/* Cart Modal */}
-      <AnimatePresence>
-        {isCartOpen && (
-          <div className={styles.modalOverlay} onClick={() => setIsCartOpen(false)}>
-            <motion.div 
-              className={styles.modal} 
-              initial={{ scale: 0.9, opacity: 0 }} 
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={e => e.stopPropagation()}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
-                <h2>ตะกร้าสินค้าของคุณ</h2>
-                <button onClick={() => setIsCartOpen(false)} className={styles.closeBtn}>
-                  <X />
-                </button>
-              </div>
-
-              <div className={styles.cartList}>
-                {cart.map(item => (
-                  <div key={item._id} className={styles.cartItem}>
-                    <div>
-                      <h4 style={{ margin: 0 }}>{item.name}</h4>
-                      <p style={{ color: '#94a3b8', margin: 0 }}>฿{item.price.toLocaleString()}</p>
-                    </div>
-                    <div className={styles.qtyControls}>
-                      <button onClick={() => updateCartQuantity(item._id, item.quantity - 1)} className={styles.qtyBtn}>-</button>
-                      <span className={styles.qtyText}>{item.quantity}</span>
-                      <button onClick={() => addToCart(item)} className={styles.qtyBtn}>+</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className={styles.checkoutSection}>
-                <div className={styles.totalRow}>
-                  <span>ยอดรวมทั้งสิ้น</span>
-                  <span>฿{cartTotal().toLocaleString()}</span>
-                </div>
-                <button 
-                  className={styles.checkoutBtn} 
-                  onClick={handleCheckout}
-                  disabled={cart.length === 0}
-                >
-                  ยืนยันการสั่งซื้อ
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

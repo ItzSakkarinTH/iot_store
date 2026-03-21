@@ -78,7 +78,7 @@
   width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .productInfo {
@@ -148,7 +148,7 @@
   width: 6px;
 }
 .cartItems::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 
@@ -157,14 +157,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(0, 0, 0, 0.03);
   border-radius: var(--radius-md);
   border: 1px solid var(--glass-border);
   transition: var(--transition);
 }
 
 .cartItem:hover {
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: rgba(0, 0, 0, 0.06);
   border-color: var(--primary-light);
 }
 
@@ -185,7 +185,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.05);
   padding: 0.35rem;
   border-radius: 8px;
   border: 1px solid var(--glass-border);
@@ -206,7 +206,7 @@
 }
 
 .qtyBtn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .delBtn {
@@ -223,7 +223,7 @@
 .cartFooter {
   padding: 1.75rem;
   border-top: 1px solid var(--glass-border);
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: rgba(0, 0, 0, 0.02);
   border-bottom-left-radius: var(--radius-xl);
   border-bottom-right-radius: var(--radius-xl);
 }
@@ -311,7 +311,7 @@
   padding: 1.25rem;
   border: 2px solid var(--glass-border);
   border-radius: var(--radius-lg);
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(0, 0, 0, 0.03);
   color: var(--text-primary);
   font-weight: 600;
   transition: var(--transition);
@@ -319,8 +319,8 @@
 }
 
 .payBtn:hover:not(.payBtnActive) {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.2);
 }
 
 .payBtnActive {
@@ -348,13 +348,13 @@
 }
 
 .cancelBtn {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(0, 0, 0, 0.05);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
 }
 
 .cancelBtn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   color: #fff;
 }
 
@@ -407,8 +407,8 @@
 
 .receiptItems {
   margin: 1.5rem 0;
-  border-top: 1px dashed rgba(255, 255, 255, 0.2);
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+  border-top: 1px dashed rgba(0, 0, 0, 0.2);
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
   padding: 1.5rem 0;
   display: flex;
   flex-direction: column;
@@ -425,7 +425,7 @@
 .ocrSection {
   margin-top: 2rem;
   padding: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(0, 0, 0, 0.03);
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
 }
@@ -459,7 +459,7 @@
 .closeBtn {
   width: 100%;
   padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(0, 0, 0, 0.05);
   border: 1px solid var(--glass-border);
   margin-top: 2rem;
   border-radius: var(--radius-md);
@@ -470,7 +470,7 @@
 }
 
 .closeBtn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   color: #fff;
 }
 
