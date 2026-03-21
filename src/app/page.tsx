@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ArrowRight, ShoppingBag, Zap, Globe, Truck } from "lucide-react";
+import { ArrowRight, ShoppingBag, Zap, Globe, Truck } from "lucide-react";
 import styles from "./Landing.module.css";
 import Image from "next/image";
 
@@ -46,9 +46,6 @@ export default function LandingPage() {
             <div className={styles.actions}>
               <Link href="/shop" className={styles.primaryBtn}>
                 เลือกซื้อสินค้าเลย <ArrowRight size={18} />
-              </Link>
-              <Link href="/register" className={styles.secondaryBtn}>
-                <Sparkles size={18} /> สมัครสมาชิกรับโค้ดลด
               </Link>
             </div>
           </motion.div>
