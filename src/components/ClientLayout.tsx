@@ -10,7 +10,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const isPublicPage = pathname === "/" || pathname === "/login" || pathname === "/register" || pathname === "/shop";
+  const isPublicPage = pathname === "/" || pathname === "/login" || pathname === "/register" || pathname === "/shop" || pathname === "/cart";
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {

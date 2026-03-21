@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useStore, Product } from "@/store/useStore";
 import styles from "./Shop.module.css";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { ShoppingCart, Plus, Minus, CheckCircle, X, ShoppingBag } from "lucide-react";
+import { ShoppingCart, Plus, Minus, X, ShoppingBag } from "lucide-react";
 
 export default function ShopPage() {
   const router = useRouter();
@@ -13,7 +13,6 @@ export default function ShopPage() {
     products, cart, addToCart, fetchProducts, cartTotal
   } = useStore();
   const [category, setCategory] = useState("All");
-  const [showToast, setShowToast] = useState(false);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
 
   const updateQty = (id: string, val: number, stock: number) => {
@@ -26,8 +25,7 @@ export default function ShopPage() {
   const handleAddToCart = (product: Product) => {
     const qty = quantities[product._id] || 1;
     addToCart(product, qty);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 2000);
+    router.push('/cart');
   };
 
   useEffect(() => {
@@ -122,19 +120,6 @@ export default function ShopPage() {
           })}
         </div>
       </main>
-
-      <AnimatePresence>
-        {showToast && (
-          <motion.div 
-            className={styles.toast}
-            initial={{ opacity: 0, y: 50, x: "-50%" }}
-            animate={{ opacity: 1, y: 0, x: "-50%" }}
-            exit={{ opacity: 0, y: 20, x: "-50%" }}
-          >
-            <CheckCircle size={20} /> เพิ่มสินค้าลงตะกร้าแล้ว!
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Floating Cart Button */}
       {cart.length > 0 && (
