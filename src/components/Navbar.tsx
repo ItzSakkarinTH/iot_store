@@ -71,6 +71,9 @@ export default function Navbar() {
         <Link href="/" className={`${styles.navLink} ${pathname === "/" ? styles.active : ""}`}>
           <LayoutGrid size={18} /> หน้าแรก
         </Link>
+        <Link href="/how-to-use" className={`${styles.navLink} ${pathname.startsWith("/how-to-use") ? styles.active : ""}`}>
+          <LayoutGrid size={18} /> วิธีการใช้งาน
+        </Link>
         <Link href="/shop" className={`${styles.navLink} ${pathname === "/shop" ? styles.active : ""}`}>
           <Search size={18} /> สินค้า
         </Link>
