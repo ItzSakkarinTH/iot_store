@@ -68,3 +68,45 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to place order' }, { status: 500 });
   }
 }
+
+export async function PUT(req: NextRequest) {
+  try {
+    await connectToDatabase();
+    const body = await req.json();
+    const { orderId, cancelReason, cancelDetails } = body;
+    
+    const auth = getAuthContext(req);
+    if (!auth) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    }
+    
+    // Check permission
+    if (order.userId !== auth.userId && auth.role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+    
+    // Cancel the order
+    order.status = 'Cancelled';
+    order.cancelReason = cancelReason;
+    order.cancelDetails = cancelDetails;
+    await order.save();
+    
+    // Attempt to restore stock for cancelled items
+    for (const item of order.items) {
+       const idToUse = item.productId || item._id;
+       if (idToUse) {
+         await Product.findByIdAndUpdate(idToUse, { $inc: { stock: item.quantity } });
+       }
+    }
+    
+    return NextResponse.json({ message: 'Order cancelled successfully', order });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: 'Failed to update order' }, { status: 500 });
+  }
+}

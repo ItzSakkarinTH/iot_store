@@ -14,6 +14,8 @@ const OrderSchema = new mongoose.Schema({
   total: { type: Number, required: true },
   paymentMethod: { type: String, required: true },
   status: { type: String, default: 'Completed' },
+  cancelReason: { type: String },
+  cancelDetails: { type: String },
 }, { timestamps: true });
 
 if (mongoose.models.Order) {

@@ -30,6 +30,8 @@ export interface Order {
   paymentMethod: string;
   createdAt: Date;
   status: string;
+  cancelReason?: string;
+  cancelDetails?: string;
 }
 
 export interface StoreState {
