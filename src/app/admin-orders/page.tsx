@@ -72,6 +72,13 @@ export default function AdminOrdersView() {
                   ))}
                 </div>
                 
+                {order.status === "Cancelled" && order.cancelReason && (
+                  <div style={{ background: '#fef2f2', border: '1px dashed #fca5a5', padding: '1rem', borderRadius: '8px', margin: '1rem 1.5rem 0', color: '#991b1b', fontSize: '0.9rem' }}>
+                    <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>❌ ลูกค้ายกเลิกคำสั่งซื้อ: {order.cancelReason}</div>
+                    {order.cancelDetails && <div>รายละเอียดเพิ่มเติม: {order.cancelDetails}</div>}
+                  </div>
+                )}
+                
                 <div className={styles.orderSummary}>
                   <div className={styles.paymentMethod}>
                     Method: <span>{order.paymentMethod}</span>
