@@ -5,6 +5,7 @@ import styles from "./History.module.css";
 import { motion } from "framer-motion";
 import { Search, Store, Info, Package, Truck } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const tabs = ["ทั้งหมด", "สำเร็จแล้ว", "ยกเลิก"];
 
@@ -12,6 +13,7 @@ export default function HistoryView() {
   const { orders, fetchOrders } = useStore();
   const [activeTab, setActiveTab] = useState("ทั้งหมด");
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     fetchOrders();
@@ -103,9 +105,9 @@ export default function HistoryView() {
                     {order.status === "Cancelled" ? "ยกเลิกอัตโนมัติโดยระบบ" : "คำสั่งซื้อสำเร็จเรียบร้อย"} <Info size={14} />
                   </div>
                   <div className={styles.actionBtns}>
-                    <button className={`${styles.actionBtn} ${styles.primary}`}>ซื้ออีกครั้ง</button>
+                    <button className={`${styles.actionBtn} ${styles.primary}`} onClick={() => router.push('/shop')}>ซื้ออีกครั้ง</button>
                     {order.status === "Cancelled" && <button className={styles.actionBtn}>ดูรายละเอียดการยกเลิกคำสั่งซื้อ</button>}
-                    <button className={styles.actionBtn}>ติดต่อผู้ขาย</button>
+                    <button className={styles.actionBtn} onClick={() => router.push('/contact')}>ติดต่อผู้ขาย</button>
                   </div>
                 </div>
               </div>
