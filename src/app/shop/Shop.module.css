@@ -550,25 +550,57 @@
   box-shadow: none;
 }
 
-@media (max-width: 768px) {
-  .hero {
-    padding: 3rem 1.5rem;
-  }
-  .hero h1 {
-    font-size: 2.25rem;
-  }
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  }
-  .modal {
-    width: 95%;
-    padding: 1.5rem;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  .cartPanel {
-    bottom: 5rem;
-    right: 1rem;
-    padding: 0.75rem 1.25rem;
-  }
+@media (max-width: 1024px) {
+  .hero { padding: 4rem 2rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
 }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 1rem; }
+  .hero h1 { font-size: 2rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); }
+  .modal { width: 95%; padding: 1.5rem; }
+}
+
+.promptpayRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+  border: 1px dashed rgba(16, 185, 129, 0.3);
+}
+
+.promptpayRow span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.qrHint {
+  font-size: 0.75rem;
+  background: var(--primary);
+  color: white;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 800;
+}
+
+.nameLabel {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  margin-left: 0.5rem;
+  font-weight: 500;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+

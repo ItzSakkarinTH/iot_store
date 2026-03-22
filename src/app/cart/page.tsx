@@ -1,21 +1,65 @@
 "use client";
 
 import { useStore } from "@/store/useStore";
-import { CheckSquare, Tag, FileText, Trash2, ShoppingCart } from "lucide-react";
+import { CheckSquare, Tag, FileText, Trash2, ShoppingCart, UploadCloud, Loader2, QrCode, Smartphone, User } from "lucide-react";
 import styles from "./Cart.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Tesseract from "tesseract.js";
 
 export default function CartPage() {
-  const { cart, removeFromCart, updateCartQuantity, cartTotal, clearCart, addOrder } = useStore();
+  const { 
+    cart, removeFromCart, updateCartQuantity, cartTotal, clearCart, addOrder,
+    settings, fetchSettings 
+  } = useStore();
   const [coupon, setCoupon] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [showPayment, setShowPayment] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
+  
+  // OCR State
+  const [slipFile, setSlipFile] = useState<File | null>(null);
+  const [slipPreview, setSlipPreview] = useState<string | null>(null);
+  const [ocrStatus, setOcrStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
+  const [ocrText, setOcrText] = useState("");
+  
   const router = useRouter();
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setSlipFile(file);
+    setSlipPreview(URL.createObjectURL(file));
+    setOcrStatus("processing");
+
+    try {
+      // Use Tesseract to perform OCR on Thai and English text
+      const result = await Tesseract.recognize(file, 'tha+eng');
+      const text = result.data.text;
+      
+      setOcrText(text);
+      setOcrStatus("success");
+    } catch (err) {
+      console.error("OCR Error:", err);
+      setOcrStatus("error");
+    }
+  };
 
   const handleCheckout = async () => {
     if (cart.length === 0) return;
+    if (slipFile && ocrStatus === "processing") {
+      alert("กรุณารอระบบตรวจสอบสลิปให้เสร็จสิ้นก่อน");
+      return;
+    }
+    if (slipFile && ocrStatus === "success" && !(ocrText.includes(cartTotal().toString()) || ocrText.replace(/,/g, '').includes(cartTotal().toString()))) {
+      alert("ไม่สามารถดำเนินการต่อได้เนื่องจากยอดเงินในสลิปไม่ตรงกับยอดที่ต้องชำระ");
+      return;
+    }
 
     try {
       const token = localStorage.getItem("token");
@@ -28,7 +72,7 @@ export default function CartPage() {
           price: item.price 
         })),
         total: cartTotal(),
-        paymentMethod: "Credit Card",
+        paymentMethod: slipFile ? "Bank Transfer" : "Credit Card",
         status: "Completed",
       };
 
@@ -47,14 +91,17 @@ export default function CartPage() {
         clearCart();
         setShowPayment(false);
         setShowSuccess(true);
+        // Reset OCR states
+        setSlipFile(null);
+        setSlipPreview(null);
+        setOcrStatus("idle");
+        setOcrText("");
       } else {
         alert("ทำรายการไม่สำเร็จ กรุณาลองใหม่");
-        setShowPayment(false);
       }
     } catch (err) {
       console.error(err);
       alert("เกิดข้อผิดพลาด");
-      setShowPayment(false);
     }
   };
 
@@ -83,17 +130,120 @@ export default function CartPage() {
         </div>
       )}
 
-      {/* Payment Modal */}
+      {/* Payment Modal with OCR */}
       {showPayment && (
         <div className={styles.modalOverlay} onClick={() => setShowPayment(false)}>
-          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+          <div className={styles.modalContent} style={{ maxWidth: '500px' }} onClick={e => e.stopPropagation()}>
             <h2 className={styles.modalTitle}>ยืนยันการชำระเงิน</h2>
             <p className={styles.modalDesc}>
-              ยอดชำระเงินทั้งหมด <b>฿{cartTotal().toLocaleString()}</b><br/>ต้องการดำเนินการชำระเงินเลยหรือไม่?
+              ยอดชำระเงินทั้งหมด <b>฿{cartTotal().toLocaleString()}</b>
             </p>
-            <div className={styles.modalActions}>
+            
+            {/* PromptPay Info Section */}
+            {(settings.promptpay || settings.promptpay_qr) && (
+              <div className={styles.paymentInfoCard}>
+                <div className={styles.paymentInfoTitle}>
+                   <QrCode size={18} />
+                   <span>ช่องทางการโอนเงิน (PromptPay)</span>
+                </div>
+                
+                <div className={styles.paymentInfoContent}>
+                  {settings.promptpay_qr && (
+                    <div className={styles.checkoutQrBox}>
+                      <img src={settings.promptpay_qr} alt="PromptPay QR" />
+                    </div>
+                  )}
+                  
+                  <div className={styles.checkoutDetailsBox}>
+                    <div className={styles.detailItem}>
+                       <Smartphone size={16} />
+                       <span className={styles.detailLabel}>พร้อมเพย์:</span>
+                       <span className={styles.detailValue}>{settings.promptpay}</span>
+                    </div>
+                    {settings.promptpay_name && (
+                      <div className={styles.detailItem}>
+                         <User size={16} />
+                         <span className={styles.detailLabel}>ชื่อบัญชี:</span>
+                         <span className={styles.detailValue}>{settings.promptpay_name}</span>
+                      </div>
+                    )}
+                    <div className={styles.scanNotice}>* สแกน QR หรือโอนเข้าเบอร์ด้านบน</div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div className={styles.ocrSection}>
+              <h3 className={styles.ocrStepTitle}>2. อัปโหลดสลิปโอนเงิน (AI ตรวจสอบ)</h3>
+              
+              {!slipPreview ? (
+                <label style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '120px', backgroundColor: 'var(--surface)', border: '2px dashed var(--primary)', borderRadius: '12px', cursor: 'pointer', color: 'var(--primary)', transition: '0.2s' }}>
+                  <UploadCloud size={32} style={{ marginBottom: '0.5rem' }} />
+                  <span>คลิกเพื่ออัปโหลดสลิป</span>
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileUpload} />
+                </label>
+              ) : (
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                  <img src={slipPreview} alt="Slip" style={{ width: '100px', height: 'auto', borderRadius: '8px', border: '1px solid var(--glass-border)' }} />
+                  <div style={{ flex: 1 }}>
+                    {ocrStatus === "processing" && (
+                      <div style={{ color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
+                        <Loader2 className={styles.spinnerIcon} /> AI กำลังอ่านค่าจากสลิป...
+                      </div>
+                    )}
+                    {ocrStatus === "success" && (() => {
+                      const isAmountMatched = ocrText.includes(cartTotal().toString()) || ocrText.replace(/,/g, '').includes(cartTotal().toString());
+                      return (
+                      <div style={{ color: '#0f172a', fontSize: '0.9rem' }}>
+                        <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--success)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                          ✅ สแกนสลิปสำเร็จ
+                        </div>
+                        <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                             <span style={{ color: '#64748b' }}>สถานะยอดเงิน:</span>
+                             <span style={{ fontWeight: 600, color: isAmountMatched ? 'green' : '#dc2626' }}>
+                               {isAmountMatched ? `ตรงกัน (฿${cartTotal().toLocaleString()})` : "❌ ยอดโอนไม่ตรงกับบิล"}
+                             </span>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                             <span style={{ color: '#64748b' }}>ธนาคารต้นทาง:</span>
+                             <span style={{ fontWeight: 600 }}>{/krungthai|กรุงไทย/i.test(ocrText) ? "กรุงไทย (KTB)" : /kbank|กสิกร/i.test(ocrText) ? "กสิกรไทย (KBANK)" : /scb|ไทยพาณิชย์/i.test(ocrText) ? "ไทยพาณิชย์ (SCB)" : /bbl|กรุงเทพ/i.test(ocrText) ? "กรุงเทพ (BBL)" : "ตรวจพบข้อมูล"}</span>
+                          </div>
+                          
+                          <details style={{ marginTop: '0.25rem', fontSize: '0.8rem', color: '#94a3b8' }}>
+                            <summary style={{ cursor: 'pointer' }}>ดูข้อความดิบ (Raw Text)</summary>
+                            <div style={{ marginTop: '0.5rem', maxHeight: '80px', overflowY: 'auto', whiteSpace: 'pre-wrap', background: '#fff', padding: '0.5rem', borderRadius: '4px', border: '1px solid #f1f5f9', color: '#64748b' }}>
+                               {ocrText || "ไม่แน่ใจข้อมูลดิบ"}
+                            </div>
+                          </details>
+                        </div>
+                      </div>
+                    );})()}
+                    {ocrStatus === "error" && (
+                      <div style={{ color: 'red' }}>❌ เกิดข้อผิดพลาดในการอ่านสลิป</div>
+                    )}
+                    <label style={{ display: 'inline-block', marginTop: '0.5rem', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--primary)', textDecoration: 'underline' }}>
+                      เปลี่ยนรูปภาพ
+                      <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileUpload} />
+                    </label>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className={styles.modalActions} style={{ marginTop: '2rem' }}>
               <button className={styles.modalBtnCancel} onClick={() => setShowPayment(false)}>ยกเลิก</button>
-              <button className={styles.modalBtnSuccess} onClick={handleCheckout}>ยืนยันการชำระเงิน</button>
+              <button 
+                className={styles.modalBtnSuccess} 
+                onClick={handleCheckout} 
+                disabled={ocrStatus === "processing" || (ocrStatus === "success" && !(ocrText.includes(cartTotal().toString()) || ocrText.replace(/,/g, '').includes(cartTotal().toString())))}
+                style={{ 
+                  opacity: ocrStatus === "processing" ? 0.6 : (ocrStatus === "success" && !(ocrText.includes(cartTotal().toString()) || ocrText.replace(/,/g, '').includes(cartTotal().toString()))) ? 0.4 : 1, 
+                  cursor: (ocrStatus === "processing" || (ocrStatus === "success" && !(ocrText.includes(cartTotal().toString()) || ocrText.replace(/,/g, '').includes(cartTotal().toString())))) ? 'not-allowed' : 'pointer'
+                }}
+              >
+                ยืนยันและชำระเงิน
+              </button>
             </div>
           </div>
         </div>

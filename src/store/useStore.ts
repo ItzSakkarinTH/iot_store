@@ -23,6 +23,12 @@ export interface Member {
   tier: 'Bronze' | 'Silver' | 'Gold';
 }
 
+export interface UserAccount {
+  _id: string;
+  username: string;
+  role: string;
+}
+
 export interface Order {
   _id: string;
   items: CartItem[];
@@ -30,6 +36,8 @@ export interface Order {
   paymentMethod: string;
   createdAt: Date;
   status: string;
+  cancelReason?: string;
+  cancelDetails?: string;
 }
 
 export interface StoreState {
@@ -51,6 +59,13 @@ export interface StoreState {
   fetchOrders: () => Promise<void>;
   fetchMembers: () => Promise<void>;
   members: Member[];
+  users: UserAccount[];
+  settings: Record<string, string>;
+  fetchUsers: () => Promise<void>;
+  fetchSettings: () => Promise<void>;
+  updateUserPassword: (userId: string, newPassword: string) => Promise<boolean>;
+  deleteUser: (userId: string) => Promise<boolean>;
+  updateSetting: (key: string, value: string) => Promise<boolean>;
   addMember: (member: Member) => void;
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
@@ -133,7 +148,18 @@ export const useStore = create<StoreState>((set, get) => ({
 
   fetchOrders: async () => {
     try {
-      const res = await fetch('/api/orders');
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const headers: HeadersInit = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      const res = await fetch('/api/orders', { headers });
+      
+      if (res.status === 401) {
+        set({ orders: [] });
+        return;
+      }
+      
       const data = await res.json();
       if (Array.isArray(data)) set({ orders: data });
     } catch (err) { console.error(err); }
@@ -148,5 +174,92 @@ export const useStore = create<StoreState>((set, get) => ({
       const data = await res.json();
       if (Array.isArray(data)) set({ members: data });
     } catch (err) { console.error(err); }
+  },
+
+  users: [],
+  fetchUsers: async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      
+      const res = await fetch('/api/admin/users', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (Array.isArray(data)) set({ users: data });
+    } catch (err) { console.error(err); }
+  },
+
+  updateUserPassword: async (userId, newPassword) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+
+      const res = await fetch('/api/admin/users', {
+        method: 'PUT',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ userId, newPassword })
+      });
+      return res.ok;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  },
+
+  deleteUser: async (userId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+
+      const res = await fetch(`/api/admin/users?userId=${userId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        set((state) => ({ users: state.users.filter(u => u._id !== userId) }));
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  },
+
+  settings: {},
+  fetchSettings: async () => {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+      if (typeof data === 'object') set({ settings: data });
+    } catch (err) { console.error(err); }
+  },
+
+  updateSetting: async (key, value) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ key, value })
+      });
+      if (res.ok) {
+        set((state) => ({ settings: { ...state.settings, [key]: value } }));
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
   }
 }));

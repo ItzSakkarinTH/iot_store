@@ -9,10 +9,17 @@ const OrderItemSchema = new mongoose.Schema({
 });
 
 const OrderSchema = new mongoose.Schema({
+  userId: { type: String },
   items: [OrderItemSchema],
   total: { type: Number, required: true },
   paymentMethod: { type: String, required: true },
   status: { type: String, default: 'Completed' },
+  cancelReason: { type: String },
+  cancelDetails: { type: String },
 }, { timestamps: true });
 
-export default mongoose.models.Order || mongoose.model('Order', OrderSchema);
+if (mongoose.models.Order) {
+  delete mongoose.models.Order;
+}
+
+export default mongoose.model('Order', OrderSchema);
