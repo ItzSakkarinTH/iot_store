@@ -71,9 +71,6 @@ export default function Navbar() {
         <Link href="/" className={`${styles.navLink} ${pathname === "/" ? styles.active : ""}`}>
           <LayoutGrid size={18} /> หน้าแรก
         </Link>
-        <Link href="/how-to-use" className={`${styles.navLink} ${pathname.startsWith("/how-to-use") ? styles.active : ""}`}>
-          <LayoutGrid size={18} /> วิธีการใช้งาน
-        </Link>
         <Link href="/shop" className={`${styles.navLink} ${pathname === "/shop" ? styles.active : ""}`}>
           <Search size={18} /> สินค้า
         </Link>
@@ -87,6 +84,9 @@ export default function Navbar() {
             <BookOpen size={18} /> ประวัติการสั่งซื้อ
           </Link>
         )}
+        <Link href="/how-to-use" className={`${styles.navLink} ${pathname.startsWith("/how-to-use") ? styles.active : ""}`}>
+          <LayoutGrid size={18} /> วิธีการใช้งาน
+        </Link>
         {isLoggedIn && userRole === "admin" && (
           <Link href="/admin-orders" className={`${styles.navLink} ${pathname === "/admin-orders" ? styles.active : ""}`}>
             <BookOpen size={18} /> รายการคำสั่งซื้อใหม่

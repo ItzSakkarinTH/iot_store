@@ -17,7 +17,7 @@ export default function HistoryView() {
     fetchOrders();
   }, [fetchOrders]);
 
-  const filteredOrders = orders.filter(o => 
+  const filteredOrders = orders.filter(o =>
     o._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     o.items.some(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
   ).filter(o => {
@@ -29,15 +29,15 @@ export default function HistoryView() {
   });
 
   return (
-    <motion.div 
+    <motion.div
       className={styles.container}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
     >
       <div className={styles.tabsContainer}>
         {tabs.map(tab => (
-          <button 
-            key={tab} 
+          <button
+            key={tab}
             className={`${styles.tabBtn} ${activeTab === tab ? styles.active : ""}`}
             onClick={() => setActiveTab(tab)}
           >
@@ -48,9 +48,9 @@ export default function HistoryView() {
 
       <div className={styles.searchBar}>
         <Search size={20} color="#999" />
-        <input 
-          type="text" 
-          placeholder="คุณสามารถค้นหาโดยใช้ชื่อผู้ขาย หมายเลขคำสั่งซื้อ หรือชื่อสินค้า" 
+        <input
+          type="text"
+          placeholder="คุณสามารถค้นหาโดยใช้ชื่อผู้ขาย หมายเลขคำสั่งซื้อ หรือชื่อสินค้า"
           className={styles.searchInput}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -68,12 +68,12 @@ export default function HistoryView() {
                   <Store size={16} /> <span>UltraStore</span>
                 </div>
                 <div className={styles.orderStatus}>
-                  {order.status === "Completed" ? "สำเร็จแล้ว" : 
-                   order.status === "Cancelled" ? "ยกเลิก" : 
-                   order.status === "Pending" ? "ที่ต้องชำระ" : order.status}
+                  {order.status === "Completed" ? "ชำระแล้ว" :
+                    order.status === "Cancelled" ? "ยกเลิก" :
+                      order.status === "Pending" ? "ที่ต้องชำระ" : order.status}
                 </div>
               </div>
-              
+
               <div className={styles.itemsList}>
                 {order.items.map((item: CartItem) => (
                   <div key={item._id} className={styles.itemRow}>
@@ -93,7 +93,7 @@ export default function HistoryView() {
                   </div>
                 ))}
               </div>
-              
+
               <div className={styles.orderFooter}>
                 <div className={styles.totalRow}>
                   รวมการสั่งซื้อ: <span className={styles.totalSum}>฿{order.total.toLocaleString()}</span>

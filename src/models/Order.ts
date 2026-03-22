@@ -16,4 +16,8 @@ const OrderSchema = new mongoose.Schema({
   status: { type: String, default: 'Completed' },
 }, { timestamps: true });
 
-export default mongoose.models.Order || mongoose.model('Order', OrderSchema);
+if (mongoose.models.Order) {
+  delete mongoose.models.Order;
+}
+
+export default mongoose.model('Order', OrderSchema);
