@@ -550,27 +550,16 @@
   box-shadow: none;
 }
 
+@media (max-width: 1024px) {
+  .hero { padding: 4rem 2rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+}
+
 @media (max-width: 768px) {
-  .hero {
-    padding: 3rem 1.5rem;
-  }
-  .hero h1 {
-    font-size: 2.25rem;
-  }
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  }
-  .modal {
-    width: 95%;
-    padding: 1.5rem;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  .cartPanel {
-    bottom: 5rem;
-    right: 1rem;
-    padding: 0.75rem 1.25rem;
-  }
+  .hero { padding: 3rem 1rem; }
+  .hero h1 { font-size: 2rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); }
+  .modal { width: 95%; padding: 1.5rem; }
 }
 
 .promptpayRow {

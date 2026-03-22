@@ -609,3 +609,41 @@
   background: rgba(0, 0, 0, 0.02);
 }
 
+@media (max-width: 480px) {
+  .modalContent {
+    padding: 1.5rem 1rem;
+    width: 95%;
+  }
+
+  .modalTitle {
+    font-size: 1.25rem;
+  }
+
+  .paymentInfoCard {
+    padding: 1rem;
+  }
+
+  .checkoutQrBox {
+    width: 180px;
+    height: 180px;
+  }
+
+  .detailValue {
+    font-size: 1rem;
+  }
+
+  .ocrSection {
+    padding: 1rem;
+  }
+
+  .modalActions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+
+  .modalBtnCancel, .modalBtnSuccess {
+    width: 100%;
+  }
+}
+
+
