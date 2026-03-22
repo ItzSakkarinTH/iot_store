@@ -2,17 +2,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1.25rem 2rem;
   background: var(--surface);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--glass-border);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   box-shadow: var(--glass-shadow);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
 }
+
 
 .navHidden {
   transform: translateY(-100%);
@@ -113,14 +114,58 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.35rem 1rem 0.35rem 0.35rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.35rem;
   background: rgba(0, 0, 0, 0.03);
   border-radius: var(--radius-pill);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
   font-size: 0.9rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
 }
+
+.profile:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.profileArea {
+  position: relative;
+}
+
+.profileDropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 180px;
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  padding: 0.5rem;
+  z-index: 1100;
+}
+
+.dropdownItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
 
 .avatar {
   width: 32px;

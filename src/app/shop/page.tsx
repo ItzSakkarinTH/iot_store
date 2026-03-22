@@ -92,19 +92,6 @@ export default function ShopPage() {
                     </div>
                   </div>
 
-                  {settings.promptpay && (
-                    <div 
-                      className={styles.promptpayRow} 
-                      title="คลิกเพื่อดู QR Code ชำระเงิน"
-                      onClick={() => settings.promptpay_qr && setQrModalOpen(true)}
-                      style={{ cursor: settings.promptpay_qr ? "pointer" : "default" }}
-                    >
-                      <Smartphone size={14} />
-                      <span>พร้อมเพย์: {settings.promptpay}</span>
-                      {settings.promptpay_name && <span className={styles.nameLabel}>({settings.promptpay_name})</span>}
-                      {settings.promptpay_qr && <span className={styles.qrHint}>(ดู QR)</span>}
-                    </div>
-                  )}
 
                   {!isOutOfStock && (
                     <>

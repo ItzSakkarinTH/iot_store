@@ -258,12 +258,15 @@
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
-  padding: 2.5rem;
+  padding: 2rem;
   border-radius: var(--radius-xl);
   text-align: left;
   transition: var(--transition);
-  box-shadow: var(--glass-shadow);
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
 }
+
 
 .featureCard:hover {
   transform: translateY(-10px);
@@ -275,15 +278,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
   background: var(--primary-light);
   color: var(--primary);
   border-radius: var(--radius-lg);
-  margin-bottom: 2rem;
   border: 1px solid var(--glass-border);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
+
+.featureContent {
+  flex: 1;
+}
+
 
 .featureCard h3 {
   font-size: 1.4rem;

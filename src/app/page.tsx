@@ -97,23 +97,32 @@ export default function LandingPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-           <div className={styles.featureCard}>
-             <div className={styles.featureIcon}><ShoppingBag size={24}/></div>
-             <h3>สินค้าคุณภาพพรีเมียม</h3>
-             <p>คัดสรรเฉพาะแบรนด์ชั้นนำและเทคโนโลยีที่ผ่านการทดสอบมาตรฐานสูงสุด</p>
-           </div>
+            <div className={styles.featureCard}>
+              <div className={styles.featureIcon}><ShoppingBag size={24}/></div>
+              <div className={styles.featureContent}>
+                <h3>สินค้าคุณภาพพรีเมียม</h3>
+                <p>คัดสรรเฉพาะแบรนด์ชั้นนำและเทคโนโลยีที่ผ่านการทดสอบมาตรฐานสูงสุด</p>
+              </div>
+            </div>
+
            
-           <div className={styles.featureCard}>
-             <div className={styles.featureIcon}><Truck size={24}/></div>
-             <h3>จัดส่งรวดเร็วทั่วไทย</h3>
-             <p>ระบบ Logistics ทันสมัย มั่นใจของถึงมือคุณอย่างปลอดภัยและรวดเร็ว</p>
-           </div>
+            <div className={styles.featureCard}>
+              <div className={styles.featureIcon}><Truck size={24}/></div>
+              <div className={styles.featureContent}>
+                <h3>จัดส่งรวดเร็วทั่วไทย</h3>
+                <p>ระบบ Logistics ทันสมัย มั่นใจของถึงมือคุณอย่างปลอดภัยและรวดเร็ว</p>
+              </div>
+            </div>
+
            
-           <div className={styles.featureCard}>
-             <div className={styles.featureIcon}><Globe size={24}/></div>
-             <h3>บริการ 24 ชั่วโมง</h3>
-             <p>สั่งซื้อและรับคำปรึกษาจากทีมงานผู้เชี่ยวชาญได้ทุกเมื่อที่คุณต้องการ</p>
-           </div>
+            <div className={styles.featureCard}>
+              <div className={styles.featureIcon}><Globe size={24}/></div>
+              <div className={styles.featureContent}>
+                <h3>บริการ 24 ชั่วโมง</h3>
+                <p>สั่งซื้อและรับคำปรึกษาจากทีมงานผู้เชี่ยวชาญได้ทุกเมื่อที่คุณต้องการ</p>
+              </div>
+            </div>
+
         </motion.div>
       </main>
     </div>
