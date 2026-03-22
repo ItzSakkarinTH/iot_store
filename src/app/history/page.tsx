@@ -3,7 +3,7 @@
 import { useStore, CartItem } from "@/store/useStore";
 import styles from "./History.module.css";
 import { motion } from "framer-motion";
-import { Search, MessageCircle, Store, Info } from "lucide-react";
+import { Search, Store, Info, Package, Truck } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const tabs = ["ทั้งหมด", "สำเร็จแล้ว", "ยกเลิก"];
@@ -65,10 +65,7 @@ export default function HistoryView() {
             <div key={order._id} className={styles.orderCard}>
               <div className={styles.orderHeader}>
                 <div className={styles.shopInfo}>
-                  <span className={styles.badge}>ร้านแนะนำดีเยี่ยม</span>
-                  <span>UltraStore</span>
-                  <button className={styles.chatBtn}><MessageCircle size={12} /> พูดคุย</button>
-                  <button className={styles.viewShopBtn}><Store size={12} /> ดูร้านค้า</button>
+                  <Store size={16} /> <span>UltraStore</span>
                 </div>
                 <div className={styles.orderStatus}>
                   {order.status === "Completed" ? "สำเร็จแล้ว" : 
