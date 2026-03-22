@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { 
-  ShoppingCart, Search, BookOpen, LayoutGrid, Sparkles, ShieldCheck, 
-  Phone, Menu, X, LogOut 
+import {
+  ShoppingCart, Search, BookOpen, LayoutGrid, Sparkles, ShieldCheck,
+  Phone, Menu, X, LogOut
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Navbar.module.css";
@@ -25,12 +25,14 @@ export default function Navbar() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoggedIn(!!localStorage.getItem("token"));
       setUserRole(localStorage.getItem("role"));
     }
   }, [pathname]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (isMenuOpen) setIsMenuOpen(false);
   }, [pathname]);
 
@@ -108,17 +110,14 @@ export default function Navbar() {
               <div className={styles.avatar}>{userRole === "admin" ? "A" : "U"}</div>
               <span className={styles.userName}>{userRole === "admin" ? "Admin" : "Customer"}</span>
             </div>
-            <button onClick={handleLogout} className={styles.logoutTextBtn}>
-              ออกจากระบบ
-            </button>
           </div>
         ) : (
           <Link href="/login" className={styles.loginBtn}>เข้าสู่ระบบ</Link>
         )}
       </div>
 
-      <button 
-        className={styles.menuToggle} 
+      <button
+        className={styles.menuToggle}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         aria-label="Toggle Menu"
       >
@@ -127,7 +126,7 @@ export default function Navbar() {
 
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div 
+          <motion.div
             className={styles.mobileOverlay}
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
@@ -135,40 +134,40 @@ export default function Navbar() {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
           >
             <div className={styles.mobileMenuContent}>
-               <div className={styles.mobileLinks}>
-                  <Link href="/" className={`${styles.mobileLink} ${pathname === "/" ? styles.active : ""}`}>
-                    <LayoutGrid size={20} /> หน้าแรก
+              <div className={styles.mobileLinks}>
+                <Link href="/" className={`${styles.mobileLink} ${pathname === "/" ? styles.active : ""}`}>
+                  <LayoutGrid size={20} /> หน้าแรก
+                </Link>
+                <Link href="/shop" className={`${styles.mobileLink} ${pathname === "/shop" ? styles.active : ""}`}>
+                  <Search size={20} /> สินค้า
+                </Link>
+                {isLoggedIn && userRole === "admin" && (
+                  <Link href="/dashboard" className={`${styles.mobileLink} ${pathname.startsWith("/dashboard") ? styles.active : ""}`}>
+                    <ShieldCheck size={20} /> จัดการร้านค้า
                   </Link>
-                  <Link href="/shop" className={`${styles.mobileLink} ${pathname === "/shop" ? styles.active : ""}`}>
-                    <Search size={20} /> สินค้า
+                )}
+                {isLoggedIn && userRole !== "admin" && (
+                  <Link href="/history" className={`${styles.mobileLink} ${pathname === "/history" ? styles.active : ""}`}>
+                    <BookOpen size={20} /> ประวัติการสั่งซื้อ
                   </Link>
-                  {isLoggedIn && userRole === "admin" && (
-                    <Link href="/dashboard" className={`${styles.mobileLink} ${pathname.startsWith("/dashboard") ? styles.active : ""}`}>
-                      <ShieldCheck size={20} /> จัดการร้านค้า
-                    </Link>
-                  )}
-                  {isLoggedIn && userRole !== "admin" && (
-                    <Link href="/history" className={`${styles.mobileLink} ${pathname === "/history" ? styles.active : ""}`}>
-                      <BookOpen size={20} /> ประวัติการสั่งซื้อ
-                    </Link>
-                  )}
-                  <Link href="/how-to-use" className={`${styles.mobileLink} ${pathname.startsWith("/how-to-use") ? styles.active : ""}`}>
-                    <LayoutGrid size={20} /> วิธีการใช้งาน
-                  </Link>
-                  <Link href="/contact" className={`${styles.mobileLink} ${pathname === "/contact" ? styles.active : ""}`}>
-                    <Phone size={20} /> ติดต่อ
-                  </Link>
-               </div>
+                )}
+                <Link href="/how-to-use" className={`${styles.mobileLink} ${pathname.startsWith("/how-to-use") ? styles.active : ""}`}>
+                  <LayoutGrid size={20} /> วิธีการใช้งาน
+                </Link>
+                <Link href="/contact" className={`${styles.mobileLink} ${pathname === "/contact" ? styles.active : ""}`}>
+                  <Phone size={20} /> ติดต่อ
+                </Link>
+              </div>
 
-               <div className={styles.mobileBottomArea}>
-                  {isLoggedIn ? (
-                    <button onClick={handleLogout} className={styles.mobileLogoutBtn}>
-                      <LogOut size={20} /> ออกจากระบบ
-                    </button>
-                  ) : (
-                    <Link href="/login" className={styles.mobileLoginBtn}>เข้าสู่ระบบ</Link>
-                  )}
-               </div>
+              <div className={styles.mobileBottomArea}>
+                {isLoggedIn ? (
+                  <button onClick={handleLogout} className={styles.mobileLogoutBtn}>
+                    <LogOut size={20} /> ออกจากระบบ
+                  </button>
+                ) : (
+                  <Link href="/login" className={styles.mobileLoginBtn}>เข้าสู่ระบบ</Link>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
