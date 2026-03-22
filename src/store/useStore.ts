@@ -60,9 +60,12 @@ export interface StoreState {
   fetchMembers: () => Promise<void>;
   members: Member[];
   users: UserAccount[];
+  settings: Record<string, string>;
   fetchUsers: () => Promise<void>;
+  fetchSettings: () => Promise<void>;
   updateUserPassword: (userId: string, newPassword: string) => Promise<boolean>;
   deleteUser: (userId: string) => Promise<boolean>;
+  updateSetting: (key: string, value: string) => Promise<boolean>;
   addMember: (member: Member) => void;
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
@@ -218,6 +221,39 @@ export const useStore = create<StoreState>((set, get) => ({
       });
       if (res.ok) {
         set((state) => ({ users: state.users.filter(u => u._id !== userId) }));
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  },
+
+  settings: {},
+  fetchSettings: async () => {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+      if (typeof data === 'object') set({ settings: data });
+    } catch (err) { console.error(err); }
+  },
+
+  updateSetting: async (key, value) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ key, value })
+      });
+      if (res.ok) {
+        set((state) => ({ settings: { ...state.settings, [key]: value } }));
         return true;
       }
       return false;

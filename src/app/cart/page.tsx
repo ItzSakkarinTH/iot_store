@@ -1,18 +1,25 @@
 "use client";
 
 import { useStore } from "@/store/useStore";
-import { CheckSquare, Tag, FileText, Trash2, ShoppingCart, UploadCloud, Loader2 } from "lucide-react";
+import { CheckSquare, Tag, FileText, Trash2, ShoppingCart, UploadCloud, Loader2, QrCode, Smartphone, User } from "lucide-react";
 import styles from "./Cart.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Tesseract from "tesseract.js";
 
 export default function CartPage() {
-  const { cart, removeFromCart, updateCartQuantity, cartTotal, clearCart, addOrder } = useStore();
+  const { 
+    cart, removeFromCart, updateCartQuantity, cartTotal, clearCart, addOrder,
+    settings, fetchSettings 
+  } = useStore();
   const [coupon, setCoupon] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [showPayment, setShowPayment] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
   
   // OCR State
   const [slipFile, setSlipFile] = useState<File | null>(null);
@@ -132,8 +139,42 @@ export default function CartPage() {
               ยอดชำระเงินทั้งหมด <b>฿{cartTotal().toLocaleString()}</b>
             </p>
             
-            <div className={styles.ocrSection} style={{ marginTop: '1rem', padding: '1.5rem', border: '1px dashed var(--glass-border)', borderRadius: '12px', background: 'rgba(0,0,0,0.02)' }}>
-              <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>1. อัปโหลดสลิปโอนเงิน (AI ตรวจสอบ)</h3>
+            {/* PromptPay Info Section */}
+            {(settings.promptpay || settings.promptpay_qr) && (
+              <div className={styles.paymentInfoCard}>
+                <div className={styles.paymentInfoTitle}>
+                   <QrCode size={18} />
+                   <span>ช่องทางการโอนเงิน (PromptPay)</span>
+                </div>
+                
+                <div className={styles.paymentInfoContent}>
+                  {settings.promptpay_qr && (
+                    <div className={styles.checkoutQrBox}>
+                      <img src={settings.promptpay_qr} alt="PromptPay QR" />
+                    </div>
+                  )}
+                  
+                  <div className={styles.checkoutDetailsBox}>
+                    <div className={styles.detailItem}>
+                       <Smartphone size={16} />
+                       <span className={styles.detailLabel}>พร้อมเพย์:</span>
+                       <span className={styles.detailValue}>{settings.promptpay}</span>
+                    </div>
+                    {settings.promptpay_name && (
+                      <div className={styles.detailItem}>
+                         <User size={16} />
+                         <span className={styles.detailLabel}>ชื่อบัญชี:</span>
+                         <span className={styles.detailValue}>{settings.promptpay_name}</span>
+                      </div>
+                    )}
+                    <div className={styles.scanNotice}>* สแกน QR หรือโอนเข้าเบอร์ด้านบน</div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div className={styles.ocrSection}>
+              <h3 className={styles.ocrStepTitle}>2. อัปโหลดสลิปโอนเงิน (AI ตรวจสอบ)</h3>
               
               {!slipPreview ? (
                 <label style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '120px', backgroundColor: 'var(--surface)', border: '2px dashed var(--primary)', borderRadius: '12px', cursor: 'pointer', color: 'var(--primary)', transition: '0.2s' }}>

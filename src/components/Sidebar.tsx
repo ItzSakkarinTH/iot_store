@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { 
-  ShoppingBag, 
-  LayoutDashboard, 
+import {
+  ShoppingBag,
+  LayoutDashboard,
   PackageSearch,
   History,
   Users,
   LogOut,
   Sparkles,
-  Box
+  Box,
+  CreditCard
 } from "lucide-react";
 import styles from "./Sidebar.module.css";
 import { motion } from "framer-motion";
@@ -25,6 +26,7 @@ const navGroups = [
       { href: "/inventory", label: "จัดการข้อมูลสินค้า", Icon: PackageSearch },
       { href: "/admin-orders", label: "รายการคำสั่งซื้อ", Icon: Box },
       { href: "/loyalty", label: "จัดการสมาชิก/บัญชี", Icon: Users },
+      { href: "/payment", label: "จัดการวิธีการชำระเงิน", Icon: CreditCard },
     ],
   }
 ];
@@ -58,7 +60,7 @@ export default function Sidebar() {
             </nav>
           </div>
         ))}
-        
+
         <div className={styles.bottomNav}>
           <button className={styles.logoutBtn} onClick={handleLogout}>
             <LogOut size={20} />

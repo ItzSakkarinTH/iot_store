@@ -3,15 +3,16 @@
 import { useEffect, useState } from "react";
 import { useStore, Product } from "@/store/useStore";
 import styles from "./Shop.module.css";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { ShoppingCart, Plus, Minus, X, ShoppingBag } from "lucide-react";
+import { ShoppingCart, Plus, Minus, X, ShoppingBag, Smartphone } from "lucide-react";
 
 export default function ShopPage() {
   const router = useRouter();
   const { 
-    products, cart, addToCart, fetchProducts, cartTotal
+    products, cart, addToCart, fetchProducts, cartTotal, settings, fetchSettings
   } = useStore();
+  const [qrModalOpen, setQrModalOpen] = useState(false);
   const [category, setCategory] = useState("All");
   const [quantities, setQuantities] = useState<Record<string, number>>({});
 
@@ -30,7 +31,8 @@ export default function ShopPage() {
 
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts]);
+    fetchSettings();
+  }, [fetchProducts, fetchSettings]);
 
   const categories = ["All", ...Array.from(new Set(products.map(p => p.category)))];
   const filteredProducts = category === "All" ? products : products.filter(p => p.category === category);
@@ -90,6 +92,20 @@ export default function ShopPage() {
                     </div>
                   </div>
 
+                  {settings.promptpay && (
+                    <div 
+                      className={styles.promptpayRow} 
+                      title="คลิกเพื่อดู QR Code ชำระเงิน"
+                      onClick={() => settings.promptpay_qr && setQrModalOpen(true)}
+                      style={{ cursor: settings.promptpay_qr ? "pointer" : "default" }}
+                    >
+                      <Smartphone size={14} />
+                      <span>พร้อมเพย์: {settings.promptpay}</span>
+                      {settings.promptpay_name && <span className={styles.nameLabel}>({settings.promptpay_name})</span>}
+                      {settings.promptpay_qr && <span className={styles.qrHint}>(ดู QR)</span>}
+                    </div>
+                  )}
+
                   {!isOutOfStock && (
                     <>
                       <div className={styles.qtyRow}>
@@ -134,6 +150,55 @@ export default function ShopPage() {
         </motion.div>
       )}
 
+      {/* QR Code Modal */}
+      <AnimatePresence>
+        {qrModalOpen && settings.promptpay_qr && (
+          <div 
+            className={styles.modalOverlay} 
+            onClick={() => setQrModalOpen(false)}
+            style={{ zIndex: 3000 }}
+          >
+            <motion.div 
+              className={styles.modal}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{ maxWidth: '400px', textAlign: 'center' }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>QR Code พร้อมเพย์</h3>
+                <button 
+                  onClick={() => setQrModalOpen(false)}
+                  style={{ background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: '50%', padding: '0.5rem', cursor: 'pointer', color: 'var(--text-muted)' }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <div style={{ background: 'white', padding: '1.5rem', borderRadius: '16px', boxShadow: 'inset 0 0 10px rgba(0,0,0,0.05)', marginBottom: '1.5rem' }}>
+                <img 
+                  src={settings.promptpay_qr} 
+                  alt="PromptPay QR" 
+                  style={{ width: '100%', height: 'auto', borderRadius: '8px' }} 
+                />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem', fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                   <Smartphone size={24} color="var(--primary)" />
+                   <span>{settings.promptpay}</span>
+                </div>
+                {settings.promptpay_name && (
+                  <div style={{ fontSize: '1rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                    ชื่อบัญชี: {settings.promptpay_name}
+                  </div>
+                )}
+              </div>
+              <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', fontSize: '0.95rem' }}>สแกนผ่านแอปธนาคารเพื่อชำระเงิน</p>
+
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
