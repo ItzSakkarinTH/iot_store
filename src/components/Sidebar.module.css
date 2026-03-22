@@ -60,10 +60,10 @@
 
 .navItem.active {
   color: #ffffff;
-  background-color: var(--primary-light);
-  border: 1px solid var(--primary-glow);
-  box-shadow: 0 0 15px var(--primary-light);
+  background-color: var(--primary);
+  box-shadow: 0 10px 20px var(--primary-glow);
 }
+
 
 .icon {
   color: var(--text-muted);
@@ -71,9 +71,9 @@
 }
 
 .activeIcon {
-  color: var(--primary);
-  filter: drop-shadow(0 0 5px var(--primary-glow));
+  color: #ffffff;
 }
+
 
 .bottomNav {
   background-color: var(--surface);
