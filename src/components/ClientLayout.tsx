@@ -10,7 +10,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const isPublicPage = pathname === "/" || pathname === "/login" || pathname === "/register" || pathname === "/shop" || pathname === "/cart" || pathname === "/contact" || pathname === "/history";
+  const isPublicPage = pathname === "/" || pathname === "/login" || pathname === "/register" || pathname === "/shop" || pathname === "/cart" || pathname === "/contact";
+  const isUserPage = pathname === "/history";
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -22,6 +23,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   useEffect(() => {
     if (isMounted) {
       const token = localStorage.getItem("token");
+      
       if (!token && !isPublicPage) {
         router.push("/login");
       } else if (token) {
@@ -30,27 +32,29 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         
         if (isAuthPage) {
           router.push(role === "admin" ? "/dashboard" : "/shop");
-        } else if (!isPublicPage && role !== "admin") {
-          // If trying to access admin pages but not an admin
+        } else if (!isPublicPage && !isUserPage && role !== "admin") {
+          // If trying to access admin-only pages, kick to shop
           router.push("/shop");
         }
       }
     }
-  }, [isMounted, pathname, router, isPublicPage]);
+  }, [isMounted, pathname, router, isPublicPage, isUserPage]);
 
   const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
-  const isAuthorized = isPublicPage || !!token;
+  const isAuthorized = isPublicPage || isUserPage || !!token;
 
-  if (!isMounted || (!isAuthorized && !isPublicPage)) {
-    return <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', color: 'white' }}>Loading...</div>;
+  if (!isMounted || (!isAuthorized && !isPublicPage && !isUserPage)) {
+    return <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', color: 'black' }}>Loading...</div>;
   }
+
+  const hideSidebar = isPublicPage || isUserPage;
 
   return (
     <>
       <Navbar />
-      <div className={isPublicPage ? "" : layoutStyles.container}>
-        {!isPublicPage && <Sidebar />}
-        <main className={isPublicPage ? "" : layoutStyles.mainContent}>
+      <div className={hideSidebar ? "" : layoutStyles.container}>
+        {!hideSidebar && <Sidebar />}
+        <main className={hideSidebar ? "" : layoutStyles.mainContent}>
           {children}
         </main>
       </div>

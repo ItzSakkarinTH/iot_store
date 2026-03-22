@@ -9,6 +9,7 @@ const OrderItemSchema = new mongoose.Schema({
 });
 
 const OrderSchema = new mongoose.Schema({
+  userId: { type: String },
   items: [OrderItemSchema],
   total: { type: Number, required: true },
   paymentMethod: { type: String, required: true },

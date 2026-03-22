@@ -79,7 +79,7 @@ export default function Navbar() {
             <ShieldCheck size={18} /> จัดการร้านค้า
           </Link>
         )}
-        {(!isLoggedIn || userRole !== "admin") && (
+        {isLoggedIn && userRole !== "admin" && (
           <Link href="/history" className={`${styles.navLink} ${pathname === "/history" ? styles.active : ""}`}>
             <BookOpen size={18} /> ประวัติการสั่งซื้อ
           </Link>

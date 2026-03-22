@@ -133,7 +133,18 @@ export const useStore = create<StoreState>((set, get) => ({
 
   fetchOrders: async () => {
     try {
-      const res = await fetch('/api/orders');
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const headers: HeadersInit = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      const res = await fetch('/api/orders', { headers });
+      
+      if (res.status === 401) {
+        set({ orders: [] });
+        return;
+      }
+      
       const data = await res.json();
       if (Array.isArray(data)) set({ orders: data });
     } catch (err) { console.error(err); }
