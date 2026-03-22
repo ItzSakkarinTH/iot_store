@@ -1,10 +1,10 @@
 "use client";
 
-import { useStore, CartItem } from "@/store/useStore";
+import { useStore } from "@/store/useStore";
 import styles from "./History.module.css";
 import { motion } from "framer-motion";
-import { Search, Store, Info, Package, Truck } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Search, Store, Info, Package, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Clock } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const tabs = ["ทั้งหมด", "สำเร็จแล้ว", "ยกเลิก"];
@@ -13,7 +13,14 @@ export default function HistoryView() {
   const { orders, fetchOrders } = useStore();
   const [activeTab, setActiveTab] = useState("ทั้งหมด");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
+  const itemsPerPage = 8;
   
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, activeTab]);
+
   const [cancelModal, setCancelModal] = useState<string | null>(null);
   const [cancelReason, setCancelReason] = useState("");
   const [cancelDetails, setCancelDetails] = useState("");
@@ -72,16 +79,32 @@ export default function HistoryView() {
     fetchOrders();
   }, [fetchOrders]);
 
-  const filteredOrders = orders.filter(o =>
-    o._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    o.items.some(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
-  ).filter(o => {
+  const filteredOrders = orders.filter(o => {
+    const matchesSearch = o._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      o.items.some(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    if (!matchesSearch) return false;
+
     if (activeTab === "ทั้งหมด") return true;
     if (activeTab === "สำเร็จแล้ว" && o.status === "Completed") return true;
     if (activeTab === "ยกเลิก" && o.status === "Cancelled") return true;
-    if (o.status === activeTab) return true;
-    return false;
+    return o.status === activeTab;
   });
+
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+  const currentOrders = filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const getPageNumbers = () => {
+    const pages = [];
+    let start = Math.max(1, currentPage - 2);
+    let end = Math.min(totalPages, currentPage + 2);
+    if (end - start < 4) {
+      if (start === 1) end = Math.min(totalPages, 5);
+      else if (end === totalPages) start = Math.max(1, totalPages - 4);
+    }
+    for (let i = start; i <= end; i++) pages.push(i);
+    return pages;
+  };
 
   return (
     <motion.div
@@ -167,92 +190,242 @@ export default function HistoryView() {
         </div>
       )}
 
-      <div className={styles.tabsContainer}>
-        {tabs.map(tab => (
-          <button
-            key={tab}
-            className={`${styles.tabBtn} ${activeTab === tab ? styles.active : ""}`}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab}
-          </button>
-        ))}
+      <div className={styles.header}>
+        <div className={styles.titleArea}>
+           <Store size={28} className={styles.icon} />
+           <h2>ประวัติที่ผ่านมา ({orders.length})</h2>
+        </div>
+      </div>
+
+      <div className={styles.controlsRow}>
+        <div className={styles.filtersGroup}>
+          <div className={styles.tabsContainer}>
+            {tabs.map(tab => (
+              <button
+                key={tab}
+                className={`${styles.tabBtn} ${activeTab === tab ? styles.active : ""}`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {totalPages > 0 && (
+          <div className={styles.pagination}>
+            <span className={styles.pageInfo}>แสดง {((currentPage-1)*itemsPerPage)+1}-{Math.min(currentPage*itemsPerPage, filteredOrders.length)} จาก {filteredOrders.length} รายการ</span>
+            <div className={styles.pageControls}>
+              <button 
+                className={styles.pageBtn} 
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft size={18} />
+              </button>
+              
+              {getPageNumbers().map((page, idx) => (
+                <button 
+                  key={idx}
+                  className={`${styles.pageBtn} ${currentPage === page ? styles.pageBtnActive : ""}`}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </button>
+              ))}
+              
+              <button 
+                className={styles.pageBtn} 
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className={styles.searchBar}>
         <Search size={20} color="#999" />
         <input
           type="text"
-          placeholder="คุณสามารถค้นหาโดยใช้ชื่อผู้ขาย หมายเลขคำสั่งซื้อ หรือชื่อสินค้า"
+          placeholder="คุณสามารถค้นหาโดยใช้ชื่อผู้ประกอบการ หมายเลขคำสั่งซื้อ หรือชื่อสินค้า"
           className={styles.searchInput}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
-      <div className={styles.listContainer}>
-        {filteredOrders.length === 0 ? (
-          <div className={styles.emptyState}>ยังไม่มีคำสั่งซื้อ</div>
-        ) : (
-          filteredOrders.map(order => (
-            <div key={order._id} className={styles.orderCard}>
-              <div className={styles.orderHeader}>
-                <div className={styles.shopInfo}>
-                  <Store size={16} /> <span>UltraStore</span>
-                </div>
-                <div className={styles.orderStatus}>
-                  {order.status === "Completed" ? "ชำระแล้ว" :
-                    order.status === "Cancelled" ? "ยกเลิก" :
-                      order.status === "Pending" ? "ที่ต้องชำระ" : order.status}
-                </div>
-              </div>
-
-              <div className={styles.itemsList}>
-                {order.items.map((item: CartItem) => (
-                  <div key={item._id} className={styles.itemRow}>
-                    <div className={styles.itemMain}>
-                      {item.image ? (
-                        <img src={item.image} className={styles.itemImage} alt={item.name} />
-                      ) : (
-                        <div className={styles.itemImage} style={{ background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc', fontSize: '0.8rem' }}>ไม่มีรูป</div>
-                      )}
-                      <div className={styles.itemDetails}>
-                        <span className={styles.itemName}>{item.name || "ชื่อสินค้า"}</span>
-                        <span className={styles.itemVariant}>ตัวเลือกสินค้า: ปกติ</span>
-                        <span className={styles.itemQuantity}>x{item.quantity}</span>
+      <div className={styles.tableWrapper}>
+        <table className={styles.ordersTable}>
+          <thead>
+            <tr>
+              <th>รหัสออเดอร์</th>
+              <th>วันที่สั่งซื้อ</th>
+              <th>วิธีชำระ</th>
+              <th>ยอดรวม</th>
+              <th>สถานะ</th>
+              <th style={{ textAlign: 'center' }}>จัดการ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentOrders.length === 0 ? (
+              <tr>
+                <td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>ยังไม่มีคำสั่งซื้อ</td>
+              </tr>
+            ) : (
+              currentOrders.map(order => (
+                <React.Fragment key={order._id}>
+                  <tr 
+                    className={`${styles.orderRow} ${expandedOrderId === order._id ? styles.rowActive : ""}`}
+                    onClick={() => setExpandedOrderId(expandedOrderId === order._id ? null : order._id)}
+                  >
+                    <td>
+                      <div className={styles.idCell}>
+                        <Package size={16} className={styles.idIcon} />
+                        #{order._id.slice(-8).toUpperCase()}
                       </div>
-                    </div>
-                    <span className={styles.itemPrice}>฿{item.price.toLocaleString()}</span>
-                  </div>
-                ))}
-              </div>
+                    </td>
+                    <td>{new Date(order.createdAt).toLocaleString('th-TH', { 
+                      day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' 
+                    })}</td>
+                    <td>{order.paymentMethod}</td>
+                    <td className={styles.amountText}>฿{order.total.toLocaleString()}</td>
+                    <td>
+                      <span className={`${styles.statusBadge} ${order.status === 'Completed' ? styles.statusCompleted : order.status === 'Cancelled' ? styles.statusCancelled : styles.statusPending}`}>
+                        {order.status === 'Completed' ? 'สำเร็จแล้ว' : order.status === 'Cancelled' ? 'ยกเลิก' : 'รอดำเนินการ'}
+                      </span>
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <div className={styles.actionBtnRow}>
+                        {expandedOrderId === order._id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </div>
+                    </td>
+                  </tr>
+                  {expandedOrderId === order._id && (
+                    <tr className={styles.detailRow}>
+                      <td colSpan={6}>
+                        <motion.div 
+                          className={styles.orderDetailCard}
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                        >
+                          <div className={styles.detailCardHeader}>
+                            <div className={styles.cardHeaderLeft}>
+                                <div className={styles.mainTitle}>{new Date(order.createdAt).toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                                <div className={styles.subTitle}>{order.total} บาท</div>
+                            </div>
+                            <div className={styles.cardHeaderRight}>
+                               <div className={`${styles.statusBadgeFull} ${order.status === 'Completed' ? styles.bgSuccess : order.status === 'Cancelled' ? styles.bgDanger : styles.bgWarning}`}>
+                                 <Clock size={16} /> {order.status === 'Completed' ? 'ชำระเงินสำเร็จ' : order.status === 'Cancelled' ? 'ยกเลิกแล้ว' : 'รอตรวจสอบ'}
+                               </div>
+                            </div>
+                          </div>
 
-              <div className={styles.orderFooter}>
-                <div className={styles.totalRow}>
-                  รวมการสั่งซื้อ: <span className={styles.totalSum}>฿{order.total.toLocaleString()}</span>
-                </div>
-                {order.status === "Cancelled" && order.cancelReason && (
-                  <div style={{ background: '#fef2f2', border: '1px solid #fecaca', padding: '1rem', borderRadius: '8px', marginTop: '1rem', color: '#991b1b', fontSize: '0.95rem' }}>
-                    <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>สาเหตุการยกเลิก: {order.cancelReason}</div>
-                    {order.cancelDetails && <div>รายละเอียด: {order.cancelDetails}</div>}
-                  </div>
-                )}
-                <div className={styles.actionRow} style={{ marginTop: '1.25rem' }}>
-                  <div className={styles.statusMessage}>
-                    {order.status === "Cancelled" ? "ยกเลิกอัตโนมัติโดยระบบ" : "คำสั่งซื้อสำเร็จเรียบร้อย"} <Info size={14} />
-                  </div>
-                  <div className={styles.actionBtns}>
-                    <button className={`${styles.actionBtn} ${styles.primary}`} onClick={() => router.push('/shop')}>ซื้ออีกครั้ง</button>
-                    {(order.status === "Pending" || order.status === "Completed") && (
-                      <button className={styles.actionBtn} onClick={() => setCancelModal(order._id)}>ยกเลิกคำสั่งซื้อ</button>
-                    )}
-                    <button className={styles.actionBtn} onClick={() => router.push('/contact')}>ติดต่อผู้ขาย</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))
-        )}
+                          <div className={styles.detailInfoGrid}>
+                            <div className={styles.infoCol}>
+                              <div className={styles.infoLabel}>รหัสการจอง</div>
+                              <div className={styles.infoValue}>#{order._id.slice(-8).toUpperCase()}</div>
+                            </div>
+                            <div className={styles.infoCol}>
+                              <div className={styles.infoLabel}>วันที่จอง</div>
+                              <div className={styles.infoValue}>{new Date(order.createdAt).toLocaleString('th-TH')}</div>
+                            </div>
+                            
+
+                            <div className={styles.infoCol}>
+                              <div className={styles.infoLabel}>ยอดชำระ</div>
+                              <div className={styles.infoValueEmphasis}>{order.total.toLocaleString()} บาท</div>
+                            </div>
+                            <div className={styles.infoCol}>
+                              <div className={styles.infoLabel}>ประเภทสินค้า</div>
+                              <div className={styles.infoValue}>สินค้าทั่วไป</div>
+                            </div>
+                            <div className={styles.infoCol}>
+                              <div className={styles.infoLabel}>สถานะ</div>
+                              <div className={`${styles.statusText} ${order.status === 'Completed' ? styles.txtSuccess : order.status === 'Cancelled' ? styles.txtDanger : styles.txtWarning}`}>
+                                {order.status === 'Completed' ? 'สำเร็จแล้ว' : order.status === 'Cancelled' ? 'ยกเลิก' : 'รอตรวจสอบ'}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className={styles.itemsSection}>
+                             <label className={styles.sectionLabel}>รายการสินค้า ({order.items.length})</label>
+                             <div className={styles.miniItemsList}>
+                                {order.items.map((item, idx) => (
+                                  <div key={idx} className={styles.miniItem}>
+                                    <div className={styles.miniItemMain}>
+                                      <span className={styles.itemNameText}>{item.name}</span>
+                                      <span className={styles.itemQtyText}>x{item.quantity}</span>
+                                    </div>
+                                    <span className={styles.itemPriceText}>฿{(item.price * item.quantity).toLocaleString()}</span>
+                                  </div>
+                                ))}
+                             </div>
+                          </div>
+
+                          <div className={styles.slipWrapper}>
+                             <label className={styles.sectionLabel}>หลักฐานการชำระเงิน</label>
+                             <div className={styles.receiptContainer}>
+                                <div className={styles.receiptHeader}>
+                                   <div className={styles.receiptShop}>
+                                      <span className={styles.shopLogo}>MAKE</span>
+                                      <span className={styles.shopBy}>by KBank</span>
+                                   </div>
+                                   <div className={styles.receiptTitle}>โอนเงินสำเร็จ</div>
+                                   <div className={styles.receiptDate}>{new Date().toLocaleDateString('th-TH')}</div>
+                                </div>
+                                <div className={styles.receiptBody}>
+                                   <div className={styles.receiptRow}>
+                                      <div className={styles.userIcon}>👤</div>
+                                      <div className={styles.userDetails}>
+                                         <strong>ศักรินทร์ ห.</strong>
+                                         <span>xxx-x-x3524-x</span>
+                                      </div>
+                                   </div>
+                                   <div className={styles.receiptArrow}>↓</div>
+                                   <div className={styles.receiptRow}>
+                                      <div className={styles.userIcon}>👤</div>
+                                      <div className={styles.userDetails}>
+                                         <strong>ศักรินทร์ หาญกล้า</strong>
+                                         <span>xxx-x-x8618-x</span>
+                                      </div>
+                                   </div>
+                                   <div className={styles.receiptTotal}>
+                                      <span>จำนวน</span>
+                                      <strong>{order.total.toFixed(2)} บาท</strong>
+                                   </div>
+                                   <div className={styles.receiptRef}>
+                                      เลขที่รายการ: {order._id.slice(0, 12)}
+                                   </div>
+                                </div>
+                             </div>
+                          </div>
+
+                          <div className={styles.footerActions}>
+                             <div className={`${styles.noticeBanner} ${order.status === 'Completed' ? styles.bannerSuccess : order.status === 'Cancelled' ? styles.bannerDanger : styles.bannerWarning}`}>
+                                <Info size={18} />
+                                <span>{order.status === 'Completed' ? 'รายการนี้ตรวจสอบและยืนยันเรียบร้อยแล้ว' : order.status === 'Cancelled' ? 'รายการนี้ถูกยกเลิก: ' + (order.cancelReason || 'ไม่ระบุ') : 'กำลังรอการตรวจสอบจากผู้ดูแลและระบบ โปรดรอสักครู่'}</span>
+                             </div>
+
+                             <div className={styles.btnGroup}>
+                                <button className={`${styles.actionBtn} ${styles.primary}`} onClick={() => router.push('/shop')}>ซื้ออีกครั้ง</button>
+                                {(order.status === "Pending" || order.status === "Completed") && (
+                                  <button className={styles.actionBtn} onClick={(e) => { e.stopPropagation(); setCancelModal(order._id); }}>ยกเลิกคำสั่งซื้อ</button>
+                                )}
+                                <button className={styles.actionBtn} onClick={() => router.push('/contact')}>ติดต่อผู้ขาย</button>
+                             </div>
+                          </div>
+                        </motion.div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </motion.div>
   );
