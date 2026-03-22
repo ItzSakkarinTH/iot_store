@@ -24,7 +24,7 @@ const navGroups = [
       { href: "/pos", label: "ระบบขายหน้าร้าน POS", Icon: ShoppingBag },
       { href: "/inventory", label: "จัดการข้อมูลสินค้า", Icon: PackageSearch },
       { href: "/admin-orders", label: "รายการคำสั่งซื้อ", Icon: Box },
-      { href: "/loyalty", label: "ระบบสมาชิก CRM", Icon: Users },
+      { href: "/loyalty", label: "จัดการสมาชิก/บัญชี", Icon: Users },
     ],
   }
 ];

@@ -23,6 +23,12 @@ export interface Member {
   tier: 'Bronze' | 'Silver' | 'Gold';
 }
 
+export interface UserAccount {
+  _id: string;
+  username: string;
+  role: string;
+}
+
 export interface Order {
   _id: string;
   items: CartItem[];
@@ -53,6 +59,10 @@ export interface StoreState {
   fetchOrders: () => Promise<void>;
   fetchMembers: () => Promise<void>;
   members: Member[];
+  users: UserAccount[];
+  fetchUsers: () => Promise<void>;
+  updateUserPassword: (userId: string, newPassword: string) => Promise<boolean>;
+  deleteUser: (userId: string) => Promise<boolean>;
   addMember: (member: Member) => void;
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
@@ -161,5 +171,59 @@ export const useStore = create<StoreState>((set, get) => ({
       const data = await res.json();
       if (Array.isArray(data)) set({ members: data });
     } catch (err) { console.error(err); }
+  },
+
+  users: [],
+  fetchUsers: async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      
+      const res = await fetch('/api/admin/users', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (Array.isArray(data)) set({ users: data });
+    } catch (err) { console.error(err); }
+  },
+
+  updateUserPassword: async (userId, newPassword) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+
+      const res = await fetch('/api/admin/users', {
+        method: 'PUT',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ userId, newPassword })
+      });
+      return res.ok;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  },
+
+  deleteUser: async (userId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+
+      const res = await fetch(`/api/admin/users?userId=${userId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        set((state) => ({ users: state.users.filter(u => u._id !== userId) }));
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
   }
 }));
