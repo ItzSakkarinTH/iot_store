@@ -22,6 +22,7 @@ export default function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -106,10 +107,28 @@ export default function Navbar() {
 
         {isLoggedIn ? (
           <div className={styles.profileArea}>
-            <div className={styles.profile}>
+            <div 
+              className={styles.profile} 
+              onClick={() => setIsProfileOpen(!isProfileOpen)}
+            >
               <div className={styles.avatar}>{userRole === "admin" ? "A" : "U"}</div>
               <span className={styles.userName}>{userRole === "admin" ? "Admin" : "Customer"}</span>
             </div>
+
+            <AnimatePresence>
+              {isProfileOpen && (
+                <motion.div 
+                  className={styles.profileDropdown}
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                >
+                  <button onClick={handleLogout} className={styles.dropdownItem}>
+                    <LogOut size={16} /> ออกจากระบบ
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         ) : (
           <Link href="/login" className={styles.loginBtn}>เข้าสู่ระบบ</Link>
