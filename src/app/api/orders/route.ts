@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const body = await req.json();
-    const { items, total, paymentMethod, buyerName, buyerPhone, buyerAddress } = body;
+    const { items, total, paymentMethod, buyerName, buyerPhone, buyerAddress, slipUrl } = body;
     
     const auth = getAuthContext(req);
     const userId = auth ? auth.userId : 'guest';
@@ -59,7 +59,8 @@ export async function POST(req: NextRequest) {
       userId,
       buyerName,
       buyerPhone,
-      buyerAddress
+      buyerAddress,
+      slipUrl
     });
     
     // Reduce stock for each item

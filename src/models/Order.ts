@@ -19,6 +19,7 @@ const OrderSchema = new mongoose.Schema({
   buyerAddress: { type: String },
   cancelReason: { type: String },
   cancelDetails: { type: String },
+  slipUrl: { type: String },
 }, { timestamps: true });
 
 if (mongoose.models.Order) {
