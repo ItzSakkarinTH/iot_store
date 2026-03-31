@@ -46,13 +46,21 @@ export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const body = await req.json();
-    const { items, total, paymentMethod } = body;
+    const { items, total, paymentMethod, buyerName, buyerPhone, buyerAddress } = body;
     
     const auth = getAuthContext(req);
     const userId = auth ? auth.userId : 'guest';
     
     // Create actual order
-    const order = await Order.create({ items, total, paymentMethod, userId });
+    const order = await Order.create({ 
+      items, 
+      total, 
+      paymentMethod, 
+      userId,
+      buyerName,
+      buyerPhone,
+      buyerAddress
+    });
     
     // Reduce stock for each item
     for (const item of items) {

@@ -14,6 +14,9 @@ const OrderSchema = new mongoose.Schema({
   total: { type: Number, required: true },
   paymentMethod: { type: String, required: true },
   status: { type: String, default: 'Completed' },
+  buyerName: { type: String },
+  buyerPhone: { type: String },
+  buyerAddress: { type: String },
   cancelReason: { type: String },
   cancelDetails: { type: String },
 }, { timestamps: true });
