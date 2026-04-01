@@ -226,6 +226,26 @@ export default function AdminOrdersView() {
                             </div>
                           </div>
 
+                          {(order.buyerName || order.buyerPhone || order.buyerAddress) && (
+                            <div className={styles.buyerDetailSection}>
+                              <label className={styles.sectionLabel}>ข้อมูลลูกค้าและที่อยู่จัดส่ง</label>
+                              <div className={styles.buyerInfoGrid}>
+                                <div className={styles.buyerInfoItem}>
+                                  <span className={styles.infoLabelSmall}>ชื่อลูกค้า:</span>
+                                  <span className={styles.infoValueSmall}>{order.buyerName || "-"}</span>
+                                </div>
+                                <div className={styles.buyerInfoItem}>
+                                  <span className={styles.infoLabelSmall}>เบอร์โทรศัพท์:</span>
+                                  <span className={styles.infoValueSmall}>{order.buyerPhone || "-"}</span>
+                                </div>
+                                <div className={styles.buyerInfoItem} style={{ gridColumn: 'span 2' }}>
+                                  <span className={styles.infoLabelSmall}>ที่อยู่จัดส่ง:</span>
+                                  <span className={styles.infoValueSmall}>{order.buyerAddress || "-"}</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
                           <div className={styles.slipWrapper}>
                              <label className={styles.sectionLabel}>หลักฐานการชำระเงิน</label>
                              <div className={styles.receiptContainer}>

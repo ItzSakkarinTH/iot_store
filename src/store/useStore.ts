@@ -38,6 +38,10 @@ export interface Order {
   status: string;
   cancelReason?: string;
   cancelDetails?: string;
+  buyerName?: string;
+  buyerPhone?: string;
+  buyerAddress?: string;
+  slipUrl?: string;
 }
 
 export interface StoreState {
