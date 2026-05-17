@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌾 SISAKET Rice Spreader Non-Hands (เครื่องเกลี่ยข้าวเปลือก/กลับแกลบอัจฉริยะระบบไร้มือสัมผัส)
 
-## Getting Started
+> [!NOTE]
+> **โครงการนวัตกรรมเพื่อการเกษตรกรรมอัจฉริยะ (Smart Agriculture IoT Project)**  
+> อุปกรณ์ IoT คาร์โรเวอร์ต้นแบบสำหรับทุ่นแรงเกษตรกรไทย ช่วยในงานเกลี่ยข้าวเปลือกในลานตาก หรือหมุนกลับหน้าแกลบในเล้าไก่/เล้าหมูโดยอัตโนมัติ ควบคุมและบริหารคลังชิ้นส่วนอุปกรณ์ผ่านระบบเว็บแอปพลิเคชัน **UltraStore**
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🛠️ รายการอุปกรณ์และชิ้นส่วนอิเล็กทรอนิกส์ทั้งหมด (Equipment & Components List)
+
+รายละเอียดชิ้นส่วนอุปกรณ์ทั้งหมดที่ใช้ในโครงสร้างรถเกลี่ยข้าวเปลือกอัจฉริยะ แบ่งตามหมวดหมู่การใช้งานทางวิศวกรรม:
+
+### 1. ระบบควบคุมและการเชื่อมต่อหลัก (Microcontroller & IoT Control System)
+| ชิ้นส่วนอุปกรณ์ | รุ่น / รายละเอียดทางเทคนิค | หน้าที่การทำงานในโครงการ | จำนวน |
+| :--- | :--- | :--- | :---: |
+| **ESP32 NodeMCU Development Board** | ESP-WROOM-32 (38 Pins) | สมองกลหลักประมวลผลคำสั่ง, เชื่อมต่อ Wi-Fi/Bluetooth และควบคุมชิ้นส่วนไฟฟ้าทั้งหมด | 1 บอร์ด |
+| **ESP32 Expansion Base Board** | expansion shield แบบมีขั้วต่อไฟเลี้ยงในตัว | ขยายพินการเชื่อมต่อ เสริมความแน่นหนาของสายไฟเลี้ยงไม่ให้หลุดขณะเครื่องสั่นสะเทือน | 1 บอร์ด |
+| **กล่องควบคุมคอนโทรลหลัก** | กล่องพลาสติก ABS กันน้ำกันฝุ่น (IP66) | บรรจุบอร์ดประมวลผลและวงจรอิเล็กทรอนิกส์หลัก ป้องกันละอองฝุ่นแกลบและฝุ่นข้าวเปลือก | 1 กล่อง |
+
+### 2. ระบบขับเคลื่อนและกลไกเกลี่ย (Drive & Spreading Motor System)
+| ชิ้นส่วนอุปกรณ์ | รุ่น / รายละเอียดทางเทคนิค | หน้าที่การทำงานในโครงการ | จำนวน |
+| :--- | :--- | :--- | :---: |
+| **DC Geared Motors (ล้อขับเคลื่อน)** | มอเตอร์เกียร์กระแสตรง 12V (แรงบิดสูง, ความเร็วรอบต่ำ 100-200 RPM) | ขับเคลื่อนล้อซ้าย-ขวา ส่งกำลังให้รถปีนกองข้าวหรือลุยพื้นที่แกลบร่วนซุยได้ | 2-4 ตัว |
+| **DC Spreading Motor (เกลียวเกลี่ย)** | มอเตอร์เกียร์ขนาดใหญ่ 12V-24V กำลังขับสูง | หมุนขับเคลื่อนใบพัดเกลี่ยข้าว (Auger) หรือลูกกลิ้งกวาดแกลบเพื่อกระจายหน้าสัมผัส | 1 ตัว |
+| **High Power Motor Driver** | **BTS7960 43A Double H-Bridge Driver** | ขับมอเตอร์เกลียวเกลี่ยที่กินกระแสไฟสูง ปรับความเร็วและควบคุมทิศทางอย่างปลอดภัย | 1 บอร์ด |
+| **Dual Motor Driver (ล้อขับเคลื่อน)** | **L298N Dual H-Bridge Driver Module** | ควบคุมทิศทาง (เดินหน้า-ถอยหลัง-เลี้ยว) และความเร็วรอบของล้อขับเคลื่อนซ้าย-ขวา | 1 บอร์ด |
+
+### 3. ระบบไฟฟ้าและพลังงานหลัก (Power Supply & Battery System)
+| ชิ้นส่วนอุปกรณ์ | รุ่น / รายละเอียดทางเทคนิค | หน้าที่การทำงานในโครงการ | จำนวน |
+| :--- | :--- | :--- | :---: |
+| **แหล่งจ่ายไฟหลัก (Battery)** | แบตเตอรี่ลิเธียมฟอสเฟต (LiFePO4) หรือ แบตเตอรี่แห้ง 12V 7-12Ah | แหล่งจ่ายพลังงานไฟฟ้าหลักของระบบ จ่ายไฟให้มอเตอร์ขับเคลื่อนและชุดควบคุมทั้งหมด | 1 ก้อน |
+| **Step-down Buck Converter** | **LM2596** หรือ **XL4015** (มีฮีทซิงค์ระบายความร้อน) | แปลงลดแรงดันไฟฟ้าจากแบตเตอรี่ 12V ลงมาเป็น 5V จ่ายไฟเลี้ยงให้บอร์ด ESP32 และเซ็นเซอร์ | 1-2 ตัว |
+| **บอร์ดควบคุมแบตเตอรี่ (BMS)** | 4S/3S BMS Protection Board (ตามชนิดแบตเตอรี่) | ควบคุมการชาร์จ, ป้องกันกระแสไฟไหลเกิน และป้องกันแบตเตอรี่ดิสชาร์จจนหมดไฟ | 1 บอร์ด |
+
+### 4. ระบบเซ็นเซอร์อัจฉริยะและการนำทาง (Sensors & Smart Navigation)
+| ชิ้นส่วนอุปกรณ์ | รุ่น / รายละเอียดทางเทคนิค | หน้าที่การทำงานในโครงการ | จำนวน |
+| :--- | :--- | :--- | :---: |
+| **Ultrasonic Distance Sensors** | **HC-SR04** (ย่านการวัด 2cm - 400cm) | ตรวจจับสิ่งกีดขวางหรือระยะขอบเขตลานตากข้าว เพื่อคำนวณวงเลี้ยวหลบหลีกอัตโนมัติ | 2-3 ตัว |
+| **Gyroscope & Accelerometer** | **MPU6050 Module** (วัดแบบ 6 แกน) | ตรวจจับการทรงตัว ความเอียง ป้องกันตัวรถพลิกคว่ำบนกองข้าว และควบคุมแนววิ่งให้ตรง | 1 ตัว |
+| **Limit Switches (สวิตช์ชน)** | แบบมีก้านปะทะเหล็กสปริงคู่ | ตัวชนนิรภัยรอบคัน (Bumper Switch) สั่งหยุดเครื่องทันทีเมื่อมีการปะทะทางกายภาพ | 2 ตัว |
+
+### 5. โครงสร้างและส่วนควบกลไก (Chassis & Mechanical Components)
+| ชิ้นส่วนอุปกรณ์ | รุ่น / รายละเอียดทางเทคนิค | หน้าที่การทำงานในโครงการ | จำนวน |
+| :--- | :--- | :--- | :---: |
+| **Chassis / Rover Base** | โครงสร้างเหล็ก/อลูมิเนียมแผ่นน้ำหนักเบาและแข็งแรงสูง | โครงสร้างยึดตัวรถ ล้อ มอเตอร์ และกล่องวงจรควบคุมให้อยู่เป็นชุดเดียวกัน | 1 ชุด |
+| **All-Terrain Wheels / Tracks** | ล้อวิบากขนาดใหญ่ หรือ ชุดตีนตะขาบลุยโคลน | ช่วยยึดเกาะพื้นผิวเปลือกข้าวและแกลบ ป้องกันอาการล้อฟรีหรือล้อจมลงไปในกอง | 2-4 ล้อ |
+| **Stainless Steel Spreading Blade** | เกลียวเหล็กสแตนเลส (Auger Shaft) หรือ แกนกวาด | สัมผัสกับข้าวเปลือกโดยตรงเพื่อเกลี่ย ทนแรงเสียดทานและไม่ขึ้นสนิม | 1 ชุด |
+
+### 6. อุปกรณ์เสริมและความปลอดภัย (Accessories & Electrical Safety)
+*   **Toggle Switch (สวิตช์เปิด-ปิดหลัก):** สำหรับควบคุมการตัด/ต่อวงจรพลังงานหลักจากแบตเตอรี่
+*   **Emergency Stop Button (ปุ่มหยุดฉุกเฉิน):** ปุ่มกดสีแดงขนาดใหญ่ตัดไฟด่วนหน้าเครื่อง เพื่อความปลอดภัยสูงสุดขณะปฎิบัติงานจริง
+*   **Fuse Block (กระบอกฟิวส์และฟิวส์ 10A-15A):** ป้องกันความเสียหายจากปัญหากระแสไฟฟ้าลัดวงจร
+*   **Terminal Blocks & Jumper Wires:** จุดต่อสายไฟแบบขันน็อต และสายเชื่อมต่อชนิดทองแดงหนาพิเศษ ป้องกันปัญหาขั้วต่อหลวมจากแรงสั่นสะเทือนของใบพัดกวาดข้าว
+
+---
+
+## 💻 ระบบเว็บแอปพลิเคชันบริหารจัดการ (UltraStore - Web IoT Portal)
+
+โปรเจกต์นี้ทำงานร่วมกับเว็บแอปพลิเคชัน **UltraStore** ซึ่งเป็นเครื่องมือในการจัดการคลังอุปกรณ์ สั่งซื้อชิ้นส่วนอะไหล่ และวิเคราะห์ข้อมูลการสั่งซื้อชิ้นส่วนอิเล็กทรอนิกส์ในระบบ IoT:
+
+### ฟีเจอร์หลัก (Core Features)
+*   **ระบบบริหารจัดการคลังสินค้า (Inventory Management):** จัดการสเปก ราคา สต็อกสินค้าของอะไหล่รถเกลี่ยข้าวแต่ละประเภท (เช่น รุ่นมอเตอร์ แบตเตอรี่ ตัวเซ็นเซอร์) ผ่าน UI แดชบอร์ดที่สวยงามพรีเมียม
+*   **ระบบจุดขายหน้าร้าน (Point of Sale - POS):** สำหรับพนักงานหรือลูกค้าในการเลือกซื้อชิ้นส่วนอุปกรณ์และส่งคำสั่งชำระเงินเข้าระบบแบบเรียลไทม์
+*   **ระบบแดชบอร์ดสถิติอัจฉริยะ (Data Dashboard):** แสดงปริมาณยอดขาย ยอดสต็อกคงเหลือ และวิเคราะห์พฤติกรรมการซื้อผ่านกราฟอนิเมชันทันสมัย
+*   **ระบบสมาชิกและการสะสมคะแนน (Loyalty & Points System):** ส่งเสริมให้สมาชิกได้รับพอยต์สะสมเมื่อเลือกซื้อสินค้าเพื่อยกระดับ Tier (Bronze, Silver, Gold)
+
+---
+
+## 🚀 เริ่มต้นการรันระบบเว็บแอปพลิเคชัน (Web Portal Quick Start)
+
+ระบบเว็บแอปพลิเคชันพัฒนาขึ้นด้วยเฟรมเวิร์ก **Next.js 16 (App Router)** ร่วมกับ **MongoDB Database** สำหรับบันทึกสถานะอุปกรณ์และคำสั่งซื้อ
+
+### 1. การกำหนดค่าระบบ (.env Configuration)
+สร้างไฟล์ `.env` ที่โฟลเดอร์ `iot_store` และระบุตัวแปรสภาพแวดล้อมดังนี้:
+```env
+MONGODB_URI=mongodb+srv://HotelManager:manager011@sisaket.jjjl8q1.mongodb.net/iot_store?retryWrites=true&w=majority&appName=Sisaket
+JWT_SECRET=greenpoint_secret_key_2026
+NODE_ENV=development
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. การติดตั้ง Dependencies และรันแบบ Local
+รันคำสั่งเหล่านี้ผ่านเทอร์มินัล:
+```bash
+# 1. เข้าสู่โฟลเดอร์โปรเจกต์หลัก
+cd iot_store
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# 2. ติดตั้งไลบรารีทั้งหมด
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# 3. รันเซิร์ฟเวอร์สำหรับเขียนโปรแกรมพัฒนา
+npm run dev
+```
+เปิดบราวเซอร์ไปที่ [http://localhost:3000](http://localhost:3000) เพื่อเริ่มต้นการใช้บริการ UltraStore Portal
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> ✨ **พัฒนาและนวัตกรรมโดยร้านค้าศรีสะเกษไอโอที (SISAKET SHOP)**  
+> ชุมชนหนองยางข้างวัด ต.หนองครอ อ.เมือง จ.ศรีสะเกษ 33000 (บ้านที่มีตู้กดน้ำหน้าบ้าน)  
+> *LINE Official: @sisaketshop*
