@@ -208,3 +208,51 @@
   .controlsRow { flex-direction: column; align-items: stretch; gap: 1rem; }
   .pagination { justify-content: space-between; }
 }
+
+.buyerDetailSection {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  border: 1px dashed var(--glass-border);
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.sectionLabel {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.buyerInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.buyerInfoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.infoLabelSmall {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.infoValueSmall {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+@media (max-width: 600px) {
+  .buyerInfoGrid {
+    grid-template-columns: 1fr;
+  }
+}

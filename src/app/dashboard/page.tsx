@@ -1,37 +1,54 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useStore } from "@/store/useStore";
 import { 
   AreaChart, Area, XAxis, Tooltip, ResponsiveContainer
 } from "recharts";
 import styles from "../Dashboard.module.css";
 import { motion } from "framer-motion";
-import { Gift, Sparkles } from "lucide-react";
 
 export default function Dashboard() {
   const { orders, fetchOrders } = useStore();
+  const [filter, setFilter] = useState("7 วัน");
 
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
 
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
-  // Calculate today's revenue based on current date (mock simple check)
   const today = new Date().toLocaleDateString();
   const todayRevenue = orders
     .filter(o => new Date(o.createdAt).toLocaleDateString() === today)
     .reduce((sum, order) => sum + order.total, 0);
   const totalSalesCount = orders.length;
 
-  const lineData = Array.from({ length: 7 }).map((_, i) => {
+  // Dynamic filter length
+  const filterLength = filter === "7 วัน" ? 7 : filter === "14 วัน" ? 14 : filter === "1 เดือน" ? 30 : 90;
+
+  const lineData = Array.from({ length: filterLength }).map((_, i) => {
     const d = new Date();
-    d.setDate(d.getDate() - (6 - i));
+    d.setDate(d.getDate() - (filterLength - 1 - i));
     const dayStr = d.toLocaleDateString();
+    
     const val = orders
       .filter(o => new Date(o.createdAt).toLocaleDateString() === dayStr)
       .reduce((sum, order) => sum + order.total, 0);
-    return { day: i === 6 ? "วันนี้" : dayStr, value: val };
+    
+    // Formatting day label using the date object 'd' directly
+    let label = dayStr;
+    if (i === filterLength - 1) label = "วันนี้";
+    else if (filterLength > 14) {
+      // For Month/3Months, just show every 20% of data points
+      const step = Math.max(1, Math.floor(filterLength / 5));
+      if (i % step !== 0) label = "";
+      else {
+        // Correct date formatting using 'd' native methods
+        label = `${d.getDate()}/${d.getMonth() + 1}`;
+      }
+    }
+
+    return { day: label, value: val };
   });
 
   return (
@@ -92,7 +109,13 @@ export default function Dashboard() {
                 </div>
                 <div className={styles.chartFilters}>
                   {["7 วัน", "14 วัน", "1 เดือน", "3 เดือน"].map(f => (
-                    <button key={f} className={`${styles.filterBtn} ${f === "1 เดือน" ? styles.filterActive : ""}`}>{f}</button>
+                    <button 
+                      key={f} 
+                      className={`${styles.filterBtn} ${f === filter ? styles.filterActive : ""}`}
+                      onClick={() => setFilter(f)}
+                    >
+                      {f}
+                    </button>
                   ))}
                 </div>
              </div>
